@@ -804,7 +804,7 @@
         const pwd = document.getElementById('login-password').value.trim();
         const errBox = document.getElementById('login-error');
 
-        if (uid === 'production' && pwd === 'Pro@123') {
+        if (uid === 'Production' && pwd === 'Pro@123') {
             errBox.style.display = 'none';
             sessionStorage.setItem(SESSION_KEY, 'entry');
             applyRoleUI('entry');
