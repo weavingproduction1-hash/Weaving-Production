@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#1d4ed8">
-    <title>Production Details Sheet</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Weaving Production">
+    <title>Weaving Production - Production Details Sheet</title>
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="apple-touch-icon" href="logo.png">
@@ -30,18 +33,12 @@
             color: #0f172a;
         }
 
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-        }
-
-        /* Login Screen */
+        /* Login Screen Styles */
         #login-screen {
-            min-height: 90vh;
             display: flex;
-            align-items: center;
             justify-content: center;
-            padding: 15px;
+            align-items: center;
+            min-height: 92vh;
         }
 
         .login-card {
@@ -54,20 +51,23 @@
             border-top: 5px solid var(--primary);
         }
 
-        .login-card h2 {
+        .login-header {
             text-align: center;
-            font-size: 19px;
-            font-weight: 800;
-            color: #0f172a;
-            margin-bottom: 6px;
-            text-transform: uppercase;
+            margin-bottom: 22px;
         }
 
-        .login-card p.sub {
-            text-align: center;
+        .login-header h2 {
+            font-size: 20px;
+            font-weight: 800;
+            color: #0f172a;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .login-header p {
             font-size: 13px;
             color: #64748b;
-            margin-bottom: 20px;
+            margin-top: 4px;
         }
 
         .login-group {
@@ -98,37 +98,55 @@
 
         .login-error {
             color: #dc2626;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 600;
             margin-bottom: 12px;
-            display: none;
             text-align: center;
+            display: none;
         }
 
-        .btn-login-submit {
+        .btn-login {
             width: 100%;
             padding: 11px;
             background: var(--primary);
             color: white;
             border: none;
             border-radius: 6px;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 700;
             cursor: pointer;
-            margin-bottom: 12px;
             transition: 0.2s;
         }
 
-        .btn-login-submit:hover {
+        .btn-login:hover {
             background: var(--primary-hover);
         }
 
         .divider {
             text-align: center;
-            font-size: 12px;
-            color: #94a3b8;
-            margin: 10px 0;
+            margin: 16px 0;
             position: relative;
+        }
+
+        .divider::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #cbd5e1;
+            z-index: 1;
+        }
+
+        .divider span {
+            background: #ffffff;
+            padding: 0 10px;
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 600;
+            position: relative;
+            z-index: 2;
         }
 
         .btn-guest {
@@ -136,9 +154,9 @@
             padding: 10px;
             background: #f1f5f9;
             color: #1e293b;
-            border: 1px solid #cbd5e1;
+            border: 1px solid #94a3b8;
             border-radius: 6px;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 700;
             cursor: pointer;
             transition: 0.2s;
@@ -148,13 +166,23 @@
             background: #e2e8f0;
         }
 
-        /* Top User Session Bar */
-        .session-bar {
+        /* Main App Container */
+        #app-wrapper {
+            display: none;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        /* Top User Bar */
+        .user-status-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             background: #1e293b;
-            color: #ffffff;
+            color: #f8fafc;
             padding: 8px 16px;
             border-radius: 6px;
             margin-bottom: 14px;
@@ -163,10 +191,11 @@
 
         .role-badge {
             background: #2563eb;
-            padding: 3px 10px;
+            padding: 3px 9px;
             border-radius: 4px;
             font-weight: 700;
             font-size: 12px;
+            margin-left: 6px;
         }
 
         .role-badge.guest { background: #64748b; }
@@ -180,8 +209,12 @@
             padding: 5px 12px;
             border-radius: 4px;
             font-size: 12px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
+        }
+
+        .btn-logout:hover {
+            background: #dc2626;
         }
 
         /* Entry Form Section */
@@ -201,7 +234,6 @@
             gap: 15px;
             padding-bottom: 15px;
             border-bottom: 1px solid #e2e8f0;
-            position: relative;
         }
 
         .machine-selector-box label {
@@ -235,11 +267,11 @@
             max-height: 220px;
             overflow-y: auto;
             background: #ffffff;
-            border: 1px solid #cbd5e1;
+            border: 1px solid #94a3b8;
             border-top: none;
             border-radius: 0 0 6px 6px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
-            z-index: 100;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
             display: none;
         }
 
@@ -252,7 +284,7 @@
         }
 
         .search-item:hover {
-            background: #eff6ff;
+            background-color: #eff6ff;
             color: var(--primary);
         }
 
@@ -384,7 +416,7 @@
         .btn-excel:hover { background: #0f766e; }
         .btn-print { background: var(--primary); color: white; }
         .btn-print:hover { background: var(--primary-hover); }
-        .btn-all { background: #334155; color: white; padding: 6px 14px; font-size: 12px; }
+        .btn-all { background: #334155; color: white; padding: 6px 12px; font-size: 12px; }
         .btn-all.active { background: var(--primary); }
 
         /* Data Sheet Section */
@@ -413,6 +445,24 @@
             letter-spacing: 0.5px;
             text-transform: uppercase;
             color: #0f172a;
+        }
+
+        .sync-badge {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #86efac;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        .sync-badge.offline {
+            background: #fef9c3;
+            color: #854d0e;
+            border-color: #fde047;
         }
 
         .sheet-controls {
@@ -487,7 +537,7 @@
             background: #2563eb;
             color: white;
             border: none;
-            padding: 3px 7px;
+            padding: 3px 6px;
             border-radius: 3px;
             font-size: 10px;
             cursor: pointer;
@@ -497,7 +547,7 @@
             background: #ef4444;
             color: white;
             border: none;
-            padding: 3px 7px;
+            padding: 3px 6px;
             border-radius: 3px;
             font-size: 10px;
             cursor: pointer;
@@ -543,8 +593,11 @@
                 background: #fff;
                 padding: 0;
             }
-            .entry-card, .session-bar, .no-print {
+            #login-screen, .user-status-bar, .entry-card, .no-print, .sync-badge {
                 display: none !important;
+            }
+            #app-wrapper {
+                display: block !important;
             }
             .sheet-container {
                 box-shadow: none;
@@ -572,295 +625,337 @@
 <!-- Login Screen -->
 <div id="login-screen">
     <div class="login-card">
-        <h2>Production Details Sheet</h2>
-        <p class="sub">Sign in to access the system</p>
+        <div class="login-header">
+            <h2>Production Details Sheet</h2>
+            <p>Sign in to access the logging system</p>
+        </div>
         <div id="login-error" class="login-error">Invalid User ID or Password!</div>
-        <div class="login-group">
-            <label for="login-userid">User ID</label>
-            <input type="text" id="login-userid" placeholder="Enter User ID" autocapitalize="none" autocorrect="off">
-        </div>
-        <div class="login-group">
-            <label for="login-password">Password</label>
-            <input type="password" id="login-password" placeholder="Enter Password">
-        </div>
-        <button type="button" class="btn-login-submit" onclick="handleLogin()">Login</button>
-        <div class="divider">OR</div>
+        <form onsubmit="handleLogin(event)">
+            <div class="login-group">
+                <label for="login-userid">User ID</label>
+                <input type="text" id="login-userid" placeholder="Enter User ID" autocapitalize="none" autocorrect="off" required>
+            </div>
+            <div class="login-group">
+                <label for="login-password">Password</label>
+                <input type="password" id="login-password" placeholder="Enter Password" required>
+            </div>
+            <button type="submit" class="btn-login">Login</button>
+        </form>
+        <div class="divider"><span>OR</span></div>
         <button type="button" class="btn-guest" onclick="loginAsGuest()">Continue as Guest (View Only)</button>
     </div>
 </div>
 
-<!-- Main App Container -->
-<div class="container" id="app-container" style="display: none;">
-    <!-- User Session Bar -->
-    <div class="session-bar">
-        <div>Logged in as: <span id="user-role-badge" class="role-badge">Guest</span></div>
-        <button type="button" class="btn-logout" onclick="handleLogout()">Logout</button>
-    </div>
+<!-- Main Application Wrapper -->
+<div id="app-wrapper">
+    <div class="container">
+        <!-- User Role Status Bar -->
+        <div class="user-status-bar no-print">
+            <div>
+                Logged in as: <strong id="display-username">Guest</strong>
+                <span id="display-role-badge" class="role-badge guest">View Only</span>
+            </div>
+            <button type="button" class="btn-logout" onclick="logout()">Logout</button>
+        </div>
 
-    <!-- Entry Form Card (Hidden for Guest) -->
-    <div class="entry-card" id="entry-card-section">
-        <div class="machine-selector-box">
-            <label for="machine-search">Search Machine (Loom 1 - 324):</label>
-            <div class="search-wrapper">
-                <input type="text" id="machine-search" placeholder="Type Loom No. (e.g. 15)..." oninput="filterMachines()" onfocus="filterMachines()" autocomplete="off">
-                <div id="machine-dropdown" class="search-dropdown"></div>
+        <!-- Entry Form Card (Hidden for Guest) -->
+        <div class="entry-card" id="entry-section">
+            <div class="machine-selector-box">
+                <label for="machine-search">Search Machine (Loom 1 - 324):</label>
+                <div class="search-wrapper">
+                    <input type="text" id="machine-search" placeholder="Type Loom No. (e.g. 15)..." oninput="filterMachines()" onfocus="filterMachines()" autocomplete="off">
+                    <div id="machine-dropdown" class="search-dropdown"></div>
+                </div>
+            </div>
+
+            <div id="entry-form-wrapper">
+                <div class="general-grid">
+                    <div class="form-group">
+                        <label for="entry-date">Date</label>
+                        <input type="date" id="entry-date">
+                    </div>
+                    <div class="form-group">
+                        <label for="loom-no">Loom No.</label>
+                        <input type="text" id="loom-no" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="item-name">Item Name</label>
+                        <input type="text" id="item-name" placeholder="Enter Item / Fabric">
+                    </div>
+                    <div class="form-group">
+                        <label for="rpm">RPM</label>
+                        <input type="number" id="rpm" placeholder="e.g. 550">
+                    </div>
+                </div>
+
+                <div class="shifts-grid">
+                    <div class="shift-box shift-a">
+                        <div class="shift-header">
+                            <span class="shift-title">Shift - A</span>
+                            <span class="eff-badge" id="eff-preview-a">Eff: 0.0%</span>
+                        </div>
+                        <div class="shift-inputs">
+                            <div class="form-group">
+                                <label for="prod-a">Production</label>
+                                <input type="number" step="0.01" id="prod-a" placeholder="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="weft-a">Weft Stops (Count)</label>
+                                <input type="number" id="weft-a" placeholder="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="down-a">Downtime (Minit)</label>
+                                <input type="number" id="down-a" placeholder="0" oninput="updateLiveEff('a')">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="shift-box shift-b">
+                        <div class="shift-header">
+                            <span class="shift-title">Shift - B</span>
+                            <span class="eff-badge" id="eff-preview-b">Eff: 0.0%</span>
+                        </div>
+                        <div class="shift-inputs">
+                            <div class="form-group">
+                                <label for="prod-b">Production</label>
+                                <input type="number" step="0.01" id="prod-b" placeholder="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="weft-b">Weft Stops (Count)</label>
+                                <input type="number" id="weft-b" placeholder="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="down-b">Downtime (Minit)</label>
+                                <input type="number" id="down-b" placeholder="0" oninput="updateLiveEff('b')">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="shift-box shift-c">
+                        <div class="shift-header">
+                            <span class="shift-title">Shift - C</span>
+                            <span class="eff-badge" id="eff-preview-c">Eff: 0.0%</span>
+                        </div>
+                        <div class="shift-inputs">
+                            <div class="form-group">
+                                <label for="prod-c">Production</label>
+                                <input type="number" step="0.01" id="prod-c" placeholder="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="weft-c">Weft Stops (Count)</label>
+                                <input type="number" id="weft-c" placeholder="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="down-c">Downtime (Minit)</label>
+                                <input type="number" id="down-c" placeholder="0" oninput="updateLiveEff('c')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group remarks-section">
+                    <label for="remarks">Remarks</label>
+                    <input type="text" id="remarks" placeholder="Enter any notes or remarks...">
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-reset" onclick="resetForm()">Clear Fields</button>
+                    <button type="button" class="btn btn-save" id="btn-save-entry" onclick="saveEntry()">Save Entry to Sheet</button>
+                </div>
             </div>
         </div>
 
-        <div id="entry-form-wrapper">
-            <div class="general-grid">
-                <div class="form-group">
-                    <label for="entry-date">Date</label>
-                    <input type="date" id="entry-date">
+        <!-- Data Sheet Card -->
+        <div class="sheet-container">
+            <div class="sheet-top-bar">
+                <div class="sheet-title">
+                    PRODUCTION DETAILS SHEET
+                    <span id="sync-status" class="sync-badge">● Connecting...</span>
                 </div>
-                <div class="form-group">
-                    <label for="loom-no">Loom No.</label>
-                    <input type="text" id="loom-no" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="item-name">Item Name</label>
-                    <input type="text" id="item-name" placeholder="Enter Item / Fabric">
-                </div>
-                <div class="form-group">
-                    <label for="rpm">RPM</label>
-                    <input type="number" id="rpm" placeholder="e.g. 550">
+                <div class="sheet-controls">
+                    <div class="date-filter-box">
+                        <label for="filter-date">Date:</label>
+                        <input type="date" id="filter-date" onchange="filterByDate()">
+                        <button type="button" id="btn-all-dates" class="btn btn-all no-print" onclick="toggleAllDates()">ALL</button>
+                    </div>
+                    <button type="button" class="btn btn-excel no-print" onclick="exportCSV()">Export Excel (CSV)</button>
+                    <button type="button" class="btn btn-print no-print" onclick="window.print()">Print / PDF</button>
                 </div>
             </div>
 
-            <div class="shifts-grid">
-                <!-- Shift A -->
-                <div class="shift-box shift-a">
-                    <div class="shift-header">
-                        <span class="shift-title">Shift - A</span>
-                        <span class="eff-badge" id="eff-preview-a">Eff: 0.0%</span>
-                    </div>
-                    <div class="shift-inputs">
-                        <div class="form-group">
-                            <label for="prod-a">Production</label>
-                            <input type="number" step="0.01" id="prod-a" placeholder="0">
-                        </div>
-                        <div class="form-group">
-                            <label for="weft-a">Weft Stops (Count)</label>
-                            <input type="number" id="weft-a" placeholder="0">
-                        </div>
-                        <div class="form-group">
-                            <label for="down-a">Downtime (Minit)</label>
-                            <input type="number" id="down-a" placeholder="0" oninput="updateLiveEfficiency('a')">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Shift B -->
-                <div class="shift-box shift-b">
-                    <div class="shift-header">
-                        <span class="shift-title">Shift - B</span>
-                        <span class="eff-badge" id="eff-preview-b">Eff: 0.0%</span>
-                    </div>
-                    <div class="shift-inputs">
-                        <div class="form-group">
-                            <label for="prod-b">Production</label>
-                            <input type="number" step="0.01" id="prod-b" placeholder="0">
-                        </div>
-                        <div class="form-group">
-                            <label for="weft-b">Weft Stops (Count)</label>
-                            <input type="number" id="weft-b" placeholder="0">
-                        </div>
-                        <div class="form-group">
-                            <label for="down-b">Downtime (Minit)</label>
-                            <input type="number" id="down-b" placeholder="0" oninput="updateLiveEfficiency('b')">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Shift C -->
-                <div class="shift-box shift-c">
-                    <div class="shift-header">
-                        <span class="shift-title">Shift - C</span>
-                        <span class="eff-badge" id="eff-preview-c">Eff: 0.0%</span>
-                    </div>
-                    <div class="shift-inputs">
-                        <div class="form-group">
-                            <label for="prod-c">Production</label>
-                            <input type="number" step="0.01" id="prod-c" placeholder="0">
-                        </div>
-                        <div class="form-group">
-                            <label for="weft-c">Weft Stops (Count)</label>
-                            <input type="number" id="weft-c" placeholder="0">
-                        </div>
-                        <div class="form-group">
-                            <label for="down-c">Downtime (Minit)</label>
-                            <input type="number" id="down-c" placeholder="0" oninput="updateLiveEfficiency('c')">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Remarks at the End -->
-            <div class="form-group remarks-section">
-                <label for="remarks">Remarks</label>
-                <input type="text" id="remarks" placeholder="Enter any notes or remarks...">
-            </div>
-
-            <div class="form-actions">
-                <button type="button" class="btn btn-reset" onclick="resetForm(false)">Clear Fields</button>
-                <button type="button" class="btn btn-save" onclick="saveEntry()">Save Entry to Sheet</button>
-            </div>
+            <table id="data-table">
+                <thead>
+                    <tr>
+                        <th rowspan="2" style="width: 55px;">Loom No.</th>
+                        <th rowspan="2" style="width: 110px;">Item Name</th>
+                        <th rowspan="2" style="width: 50px;">RPM</th>
+                        <th colspan="3">Production</th>
+                        <th colspan="3">Weft Stops (Count)</th>
+                        <th colspan="3">Shift Efficiency (%)</th>
+                        <th colspan="3">Downtime (Minit)</th>
+                        <th colspan="3">Runing Time</th>
+                        <th rowspan="2" style="width: 80px;">Total Production</th>
+                        <th rowspan="2" style="width: 80px;">Total Efficiency</th>
+                        <th rowspan="2" style="width: 110px;">Remarks</th>
+                        <th rowspan="2" id="th-action" class="no-print" style="width: 75px;">Action</th>
+                    </tr>
+                    <tr>
+                        <th class="sub-th">A</th>
+                        <th class="sub-th">B</th>
+                        <th class="sub-th">C</th>
+                        <th class="sub-th">A</th>
+                        <th class="sub-th">B</th>
+                        <th class="sub-th">C</th>
+                        <th class="sub-th">A</th>
+                        <th class="sub-th">B</th>
+                        <th class="sub-th">C</th>
+                        <th class="sub-th">A</th>
+                        <th class="sub-th">B</th>
+                        <th class="sub-th">C</th>
+                        <th class="sub-th">A</th>
+                        <th class="sub-th">B</th>
+                        <th class="sub-th">C</th>
+                    </tr>
+                </thead>
+                <tbody id="sheet-body">
+                    <!-- Rows dynamically rendered here -->
+                </tbody>
+            </table>
         </div>
-    </div>
-
-    <!-- Main Data Sheet -->
-    <div class="sheet-container">
-        <div class="sheet-top-bar">
-            <div class="sheet-title">PRODUCTION DETAILS SHEET</div>
-            <div class="sheet-controls">
-                <div class="date-filter-box">
-                    <label for="filter-date">Date:</label>
-                    <input type="date" id="filter-date" onchange="filterByDate()">
-                    <button type="button" id="btn-all-dates" class="btn btn-all no-print" onclick="toggleAllDates()">ALL</button>
-                </div>
-                <button type="button" class="btn btn-excel no-print" onclick="exportCSV()">Export Excel (CSV)</button>
-                <button type="button" class="btn btn-print no-print" onclick="window.print()">Print / PDF</button>
-            </div>
-        </div>
-
-        <table id="data-table">
-            <thead>
-                <tr>
-                    <th rowspan="2" style="width: 55px;">Loom No.</th>
-                    <th rowspan="2" style="width: 110px;">Item Name</th>
-                    <th rowspan="2" style="width: 50px;">RPM</th>
-                    <th colspan="3">Production</th>
-                    <th colspan="3">Weft Stops (Count)</th>
-                    <th colspan="3">Shift Efficiency (%)</th>
-                    <th colspan="3">Downtime (Minit)</th>
-                    <th colspan="3">Runing Time</th>
-                    <th rowspan="2" style="width: 80px;">Total Production</th>
-                    <th rowspan="2" style="width: 80px;">Total Efficiency</th>
-                    <th rowspan="2" style="width: 110px;">Remarks</th>
-                    <th rowspan="2" id="action-th" class="no-print" style="width: 75px;">Action</th>
-                </tr>
-                <tr>
-                    <th class="sub-th">A</th>
-                    <th class="sub-th">B</th>
-                    <th class="sub-th">C</th>
-                    <th class="sub-th">A</th>
-                    <th class="sub-th">B</th>
-                    <th class="sub-th">C</th>
-                    <th class="sub-th">A</th>
-                    <th class="sub-th">B</th>
-                    <th class="sub-th">C</th>
-                    <th class="sub-th">A</th>
-                    <th class="sub-th">B</th>
-                    <th class="sub-th">C</th>
-                    <th class="sub-th">A</th>
-                    <th class="sub-th">B</th>
-                    <th class="sub-th">C</th>
-                </tr>
-            </thead>
-            <tbody id="sheet-body">
-                <!-- Rows dynamically rendered here -->
-            </tbody>
-        </table>
     </div>
 </div>
 
+<!-- Firebase SDKs (App + Realtime Database) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
 <script>
+    // Configured with your Singapore Firebase Realtime Database URL
+    const FIREBASE_DB_URL = "https://weaving-production-default-rtdb.asia-southeast1.firebasedatabase.app";
+
     const SHIFT_MINUTES = 480;
     const STORAGE_KEY = 'loom_production_details_final';
-    const SESSION_KEY = 'loom_user_role_session';
+    const SESSION_KEY = 'loom_user_session_final';
     let showAllDates = false;
-    let currentUserRole = null; // 'guest', 'entry', 'admin'
+    let currentRole = null;
+    let cloudRecords = [];
+    let dbRef = null;
 
-    // Register Service Worker for PWA
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('./sw.js').catch(() => {});
-        });
-    }
+    // Initialize Firebase Realtime Database
+    (function initFirebase() {
+        const badge = document.getElementById('sync-status');
+        try {
+            firebase.initializeApp({ databaseURL: FIREBASE_DB_URL });
+            dbRef = firebase.database().ref('production_records');
 
-    // Generate 1 to 324 machine list
-    const machines = Array.from({ length: 324 }, (_, i) => i + 1);
-
-    // Initialize dates
-    const todayStr = new Date().toISOString().split('T')[0];
-    document.getElementById('entry-date').value = todayStr;
-    document.getElementById('filter-date').value = todayStr;
-
-    // Check existing session
-    (function initSession() {
-        const savedRole = sessionStorage.getItem(SESSION_KEY);
-        if (savedRole) {
-            applyRoleUI(savedRole);
+            dbRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                cloudRecords = data ? Object.values(data) : [];
+                cloudRecords.sort((a, b) => a.loomNo - b.loomNo);
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(cloudRecords));
+                badge.textContent = "● Live Cloud Sync";
+                badge.classList.remove('offline');
+                renderTable();
+            }, (error) => {
+                console.warn("Firebase read error:", error);
+                badge.textContent = "● Offline / Local";
+                badge.classList.add('offline');
+                cloudRecords = getLocalRecords();
+                renderTable();
+            });
+        } catch (err) {
+            badge.textContent = "● Local Mode";
+            badge.classList.add('offline');
+            cloudRecords = getLocalRecords();
+            renderTable();
         }
     })();
 
-    // Support Enter key on login inputs
-    document.getElementById('login-password').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') handleLogin();
-    });
+    // Role & Authentication Logic
+    function handleLogin(e) {
+        e.preventDefault();
+        const userId = document.getElementById('login-userid').value.trim();
+        const password = document.getElementById('login-password').value.trim();
+        const errorBox = document.getElementById('login-error');
 
-    function handleLogin() {
-        const uid = document.getElementById('login-userid').value.trim();
-        const pwd = document.getElementById('login-password').value.trim();
-        const errBox = document.getElementById('login-error');
-
-        if (uid === 'Production' && pwd === 'Pro@123') {
-            errBox.style.display = 'none';
-            sessionStorage.setItem(SESSION_KEY, 'entry');
-            applyRoleUI('entry');
-        } else if (uid === 'Production' && pwd === 'Giyas@7252') {
-            errBox.style.display = 'none';
-            sessionStorage.setItem(SESSION_KEY, 'admin');
-            applyRoleUI('admin');
+        if (userId === 'production' && password === 'Pro@123') {
+            errorBox.style.display = 'none';
+            setSession('entry', 'production');
+        } else if (userId === 'Production' && password === 'Giyas@7252') {
+            errorBox.style.display = 'none';
+            setSession('admin', 'Production (Admin)');
         } else {
-            errBox.style.display = 'block';
+            errorBox.style.display = 'block';
         }
     }
 
     function loginAsGuest() {
         document.getElementById('login-error').style.display = 'none';
-        sessionStorage.setItem(SESSION_KEY, 'guest');
-        applyRoleUI('guest');
+        setSession('guest', 'Guest');
     }
 
-    function handleLogout() {
+    function setSession(role, username) {
+        currentRole = role;
+        sessionStorage.setItem(SESSION_KEY, JSON.stringify({ role, username }));
+        applyPermissions(role, username);
+    }
+
+    function logout() {
+        currentRole = null;
         sessionStorage.removeItem(SESSION_KEY);
-        currentUserRole = null;
         document.getElementById('login-userid').value = '';
         document.getElementById('login-password').value = '';
-        document.getElementById('app-container').style.display = 'none';
+        document.getElementById('app-wrapper').style.display = 'none';
         document.getElementById('login-screen').style.display = 'flex';
         resetForm(false);
     }
 
-    function applyRoleUI(role) {
-        currentUserRole = role;
+    function applyPermissions(role, username) {
         document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('app-container').style.display = 'block';
+        document.getElementById('app-wrapper').style.display = 'block';
+        document.getElementById('display-username').textContent = username;
 
-        const badge = document.getElementById('user-role-badge');
-        const entryCard = document.getElementById('entry-card-section');
-        const actionTh = document.getElementById('action-th');
+        const badge = document.getElementById('display-role-badge');
+        const entrySection = document.getElementById('entry-section');
+        const thAction = document.getElementById('th-action');
 
         badge.className = 'role-badge ' + role;
         if (role === 'guest') {
-            badge.textContent = 'Guest (View Only)';
-            entryCard.style.display = 'none';
-            actionTh.style.display = 'none';
+            badge.textContent = 'View Only';
+            entrySection.style.display = 'none';
+            thAction.style.display = 'none';
         } else if (role === 'entry') {
-            badge.textContent = 'Entry User (Production)';
-            entryCard.style.display = 'block';
-            actionTh.style.display = 'none';
+            badge.textContent = 'Entry Only';
+            entrySection.style.display = 'block';
+            thAction.style.display = 'none';
         } else if (role === 'admin') {
-            badge.textContent = 'Admin (Production)';
-            entryCard.style.display = 'block';
-            actionTh.style.display = '';
+            badge.textContent = 'Full Admin Access';
+            entrySection.style.display = 'block';
+            thAction.style.display = 'table-cell';
         }
-
         renderTable();
     }
 
-    // Machine Search Dropdown Logic
+    // Restore session on page refresh
+    (function checkSession() {
+        const saved = sessionStorage.getItem(SESSION_KEY);
+        if (saved) {
+            try {
+                const { role, username } = JSON.parse(saved);
+                currentRole = role;
+                applyPermissions(role, username);
+            } catch (e) {}
+        }
+    })();
+
+    // Generate list of 324 machines
+    const machines = Array.from({ length: 324 }, (_, i) => i + 1);
+
+    // Set default dates
+    const todayStr = new Date().toISOString().split('T')[0];
+    document.getElementById('entry-date').value = todayStr;
+    document.getElementById('filter-date').value = todayStr;
+
     function filterMachines() {
         const input = document.getElementById('machine-search');
         const dropdown = document.getElementById('machine-dropdown');
@@ -873,19 +968,25 @@
         });
 
         if (filtered.length === 0) {
-            dropdown.style.display = 'none';
-            return;
+            dropdown.innerHTML = '<div class="search-item" style="color:#64748b; cursor:default;">No matching machine</div>';
+        } else {
+            filtered.forEach(m => {
+                const div = document.createElement('div');
+                div.className = 'search-item';
+                div.textContent = 'Loom - ' + m;
+                div.onclick = () => selectMachine(m);
+                dropdown.appendChild(div);
+            });
         }
-
-        filtered.forEach(m => {
-            const div = document.createElement('div');
-            div.className = 'search-item';
-            div.textContent = 'Loom - ' + m;
-            div.onclick = () => selectMachine(m);
-            dropdown.appendChild(div);
-        });
-
         dropdown.style.display = 'block';
+    }
+
+    function selectMachine(loomNo) {
+        document.getElementById('machine-search').value = 'Loom - ' + loomNo;
+        document.getElementById('machine-dropdown').style.display = 'none';
+        document.getElementById('entry-form-wrapper').style.display = 'block';
+        document.getElementById('loom-no').value = loomNo;
+        loadExistingMachineData(loomNo);
     }
 
     document.addEventListener('click', function(e) {
@@ -895,24 +996,12 @@
         }
     });
 
-    function selectMachine(loomNo) {
-        document.getElementById('machine-search').value = 'Loom - ' + loomNo;
-        document.getElementById('machine-dropdown').style.display = 'none';
-        document.getElementById('entry-form-wrapper').style.display = 'block';
-        document.getElementById('loom-no').value = loomNo;
-
-        if (currentUserRole === 'admin') {
-            loadExistingMachineData(loomNo);
-        } else {
-            resetForm(true);
-        }
-    }
-
     function loadExistingMachineData(loomNo) {
         const date = document.getElementById('entry-date').value;
         const records = getRecords();
         const existing = records.find(r => r.date === date && String(r.loomNo) === String(loomNo));
-        if (existing) {
+
+        if (existing && currentRole === 'admin') {
             document.getElementById('item-name').value = existing.itemName || '';
             document.getElementById('rpm').value = existing.rpm || '';
             document.getElementById('remarks').value = existing.remarks || '';
@@ -920,14 +1009,38 @@
                 document.getElementById('prod-' + s).value = existing.shifts[s].prod !== '' ? existing.shifts[s].prod : '';
                 document.getElementById('weft-' + s).value = existing.shifts[s].weft !== '' ? existing.shifts[s].weft : '';
                 document.getElementById('down-' + s).value = existing.shifts[s].down !== '' ? existing.shifts[s].down : '';
-                updateLiveEfficiency(s);
+                updateLiveEff(s);
             });
         } else {
             resetForm(true);
         }
     }
 
-    function updateLiveEfficiency(shift) {
+    function editRecord(id) {
+        if (currentRole !== 'admin') return;
+        const records = getRecords();
+        const rec = records.find(r => r.id === id);
+        if (!rec) return;
+
+        document.getElementById('entry-date').value = rec.date;
+        document.getElementById('machine-search').value = 'Loom - ' + rec.loomNo;
+        document.getElementById('entry-form-wrapper').style.display = 'block';
+        document.getElementById('loom-no').value = rec.loomNo;
+        document.getElementById('item-name').value = rec.itemName || '';
+        document.getElementById('rpm').value = rec.rpm || '';
+        document.getElementById('remarks').value = rec.remarks || '';
+
+        ['a', 'b', 'c'].forEach(s => {
+            document.getElementById('prod-' + s).value = rec.shifts[s].prod !== '' ? rec.shifts[s].prod : '';
+            document.getElementById('weft-' + s).value = rec.shifts[s].weft !== '' ? rec.shifts[s].weft : '';
+            document.getElementById('down-' + s).value = rec.shifts[s].down !== '' ? rec.shifts[s].down : '';
+            updateLiveEff(s);
+        });
+
+        document.getElementById('entry-section').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function updateLiveEff(shift) {
         const downInput = document.getElementById('down-' + shift).value;
         const badge = document.getElementById('eff-preview-' + shift);
         if (downInput !== '' && !isNaN(parseFloat(downInput))) {
@@ -943,7 +1056,6 @@
     function resetForm(keepLoom = false) {
         if (!keepLoom) {
             document.getElementById('machine-search').value = '';
-            document.getElementById('loom-no').value = '';
             document.getElementById('entry-form-wrapper').style.display = 'none';
         }
         document.getElementById('item-name').value = '';
@@ -957,7 +1069,7 @@
         });
     }
 
-    function getRecords() {
+    function getLocalRecords() {
         try {
             return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
         } catch (e) {
@@ -965,12 +1077,12 @@
         }
     }
 
-    function saveRecords(records) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+    function getRecords() {
+        return cloudRecords.length > 0 ? cloudRecords : getLocalRecords();
     }
 
     function saveEntry() {
-        if (currentUserRole === 'guest') return;
+        if (currentRole !== 'entry' && currentRole !== 'admin') return;
 
         const date = document.getElementById('entry-date').value;
         const loomNo = document.getElementById('loom-no').value;
@@ -979,12 +1091,12 @@
             return;
         }
 
-        let records = getRecords();
         const recordId = date + '_' + loomNo;
-        const existingIndex = records.findIndex(r => r.id === recordId);
+        const existingRecords = getRecords();
+        const existingRecord = existingRecords.find(r => r.id === recordId);
 
-        if (existingIndex > -1 && currentUserRole === 'entry') {
-            alert('Entry for this Loom & Date already exists. Only Admin can edit existing records.');
+        if (existingRecord && currentRole === 'entry') {
+            alert('Entry for Loom - ' + loomNo + ' on ' + date + ' already exists. Only Admin can modify existing entries.');
             return;
         }
 
@@ -1004,20 +1116,16 @@
 
             const prod = prodRaw !== '' ? parseFloat(prodRaw) : '';
             const weft = weftRaw !== '' ? parseFloat(weftRaw) : '';
+            const down = downRaw !== '' ? parseFloat(downRaw) : '';
 
-            let down = '';
             let run = '';
             let eff = '';
 
-            if (downRaw !== '' && !isNaN(parseFloat(downRaw))) {
-                const downNum = Math.max(0, Math.min(SHIFT_MINUTES, parseFloat(downRaw)));
-                const runNum = SHIFT_MINUTES - downNum;
-                const effNum = (runNum / SHIFT_MINUTES) * 100;
-
-                down = downNum;
-                run = runNum;
+            if (down !== '' && !isNaN(down)) {
+                const validDown = Math.max(0, Math.min(SHIFT_MINUTES, down));
+                run = Number((SHIFT_MINUTES - validDown).toFixed(2));
+                const effNum = (run / SHIFT_MINUTES) * 100;
                 eff = effNum.toFixed(1);
-
                 effSum += effNum;
                 effCount++;
             }
@@ -1026,7 +1134,13 @@
                 totalProd += prod;
             }
 
-            shifts[s] = { prod, weft, down, run, eff };
+            shifts[s] = {
+                prod: prod !== '' && !isNaN(prod) ? prod : '',
+                weft: weft !== '' && !isNaN(weft) ? weft : '',
+                down: down !== '' && !isNaN(down) ? down : '',
+                run: run,
+                eff: eff
+            };
         });
 
         const totalEff = effCount > 0 ? (effSum / effCount).toFixed(1) + '%' : '-';
@@ -1038,19 +1152,40 @@
             itemName,
             rpm,
             shifts,
-            totalProd: Number(totalProd.toFixed(2)),
+            totalProd: totalProd > 0 ? Number(totalProd.toFixed(2)) : 0,
             totalEff,
             remarks
         };
 
-        if (existingIndex > -1) {
-            records[existingIndex] = record;
+        // Save locally immediately
+        let localList = getLocalRecords();
+        const idx = localList.findIndex(r => r.id === record.id);
+        if (idx > -1) {
+            localList[idx] = record;
         } else {
-            records.push(record);
+            localList.push(record);
         }
+        localList.sort((a, b) => a.loomNo - b.loomNo);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(localList));
+        cloudRecords = localList;
 
-        records.sort((a, b) => a.loomNo - b.loomNo);
-        saveRecords(records);
+        // Sync to Firebase Realtime Database
+        if (dbRef) {
+            const saveBtn = document.getElementById('btn-save-entry');
+            saveBtn.textContent = 'Saving...';
+            saveBtn.disabled = true;
+            dbRef.child(recordId).set(record)
+                .then(() => {
+                    saveBtn.textContent = 'Save Entry to Sheet';
+                    saveBtn.disabled = false;
+                })
+                .catch((err) => {
+                    console.error("Firebase save error:", err);
+                    saveBtn.textContent = 'Save Entry to Sheet';
+                    saveBtn.disabled = false;
+                    alert('Saved locally, but cloud sync failed. Check internet connection.');
+                });
+        }
 
         showAllDates = false;
         document.getElementById('btn-all-dates').classList.remove('active');
@@ -1058,39 +1193,6 @@
 
         renderTable();
         resetForm(false);
-    }
-
-    function editRecord(id) {
-        if (currentUserRole !== 'admin') return;
-        const records = getRecords();
-        const rec = records.find(r => r.id === id);
-        if (!rec) return;
-
-        document.getElementById('entry-date').value = rec.date;
-        document.getElementById('machine-search').value = 'Loom - ' + rec.loomNo;
-        document.getElementById('loom-no').value = rec.loomNo;
-        document.getElementById('entry-form-wrapper').style.display = 'block';
-        document.getElementById('item-name').value = rec.itemName || '';
-        document.getElementById('rpm').value = rec.rpm || '';
-        document.getElementById('remarks').value = rec.remarks || '';
-
-        ['a', 'b', 'c'].forEach(s => {
-            document.getElementById('prod-' + s).value = rec.shifts[s].prod !== '' ? rec.shifts[s].prod : '';
-            document.getElementById('weft-' + s).value = rec.shifts[s].weft !== '' ? rec.shifts[s].weft : '';
-            document.getElementById('down-' + s).value = rec.shifts[s].down !== '' ? rec.shifts[s].down : '';
-            updateLiveEfficiency(s);
-        });
-
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function deleteRecord(id) {
-        if (currentUserRole !== 'admin') return;
-        if (confirm('Delete this entry?')) {
-            let records = getRecords().filter(r => r.id !== id);
-            saveRecords(records);
-            renderTable();
-        }
     }
 
     function filterByDate() {
@@ -1110,6 +1212,20 @@
         renderTable();
     }
 
+    function deleteRecord(id) {
+        if (currentRole !== 'admin') return;
+        if (confirm('Delete this entry?')) {
+            let localList = getLocalRecords().filter(r => r.id !== id);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(localList));
+            cloudRecords = localList;
+
+            if (dbRef) {
+                dbRef.child(id).remove();
+            }
+            renderTable();
+        }
+    }
+
     function renderTable() {
         const tbody = document.getElementById('sheet-body');
         tbody.innerHTML = '';
@@ -1120,12 +1236,12 @@
             records = records.filter(r => r.date === selectedDate);
         }
 
-        const isAdmin = currentUserRole === 'admin';
-        const colSpan = isAdmin ? 22 : 21;
+        const isAdmin = currentRole === 'admin';
+        const colSpanCount = isAdmin ? 22 : 21;
 
         if (records.length === 0) {
             const tr = document.createElement('tr');
-            tr.innerHTML = `<td colspan="${colSpan}" style="padding: 18px; color: #64748b; font-weight: 600;">No records found for this selection.</td>`;
+            tr.innerHTML = `<td colspan="${colSpanCount}" style="padding: 18px; color: #64748b; font-weight: 600;">No records found for this selection.</td>`;
             tbody.appendChild(tr);
             return;
         }
@@ -1134,13 +1250,9 @@
             const tr = document.createElement('tr');
             const loomLabel = showAllDates ? `${r.loomNo} <br><small style="color:#64748b;">(${r.date})</small>` : r.loomNo;
 
-            const actionCell = isAdmin ? `
-                <td class="no-print">
-                    <div class="action-btns">
-                        <button class="edit-btn" onclick="editRecord('${r.id}')">Edit</button>
-                        <button class="del-btn" onclick="deleteRecord('${r.id}')">Del</button>
-                    </div>
-                </td>` : '';
+            const actionCell = isAdmin
+                ? `<td class="no-print"><div class="action-btns"><button class="edit-btn" onclick="editRecord('${r.id}')">Edit</button><button class="del-btn" onclick="deleteRecord('${r.id}')">Del</button></div></td>`
+                : '';
 
             tr.innerHTML = `
                 <td style="font-weight:700;">${loomLabel}</td>
@@ -1212,6 +1324,13 @@
         link.href = URL.createObjectURL(blob);
         link.download = `production_details_${showAllDates ? 'all' : selectedDate}.csv`;
         link.click();
+    }
+
+    // Register Service Worker for PWA
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js').catch(() => {});
+        });
     }
 </script>
 
