@@ -563,6 +563,10 @@
 
         /* Print Layout */
         @media print {
+            body.guest-view #app-container,
+            body.guest-view #login-screen {
+                display: none !important;
+            }
             body {
                 background: #fff;
                 padding: 0;
@@ -667,11 +671,11 @@
                     <div class="shift-inputs">
                         <div class="form-group">
                             <label for="prod-a">Production</label>
-                            <input type="number" step="0.01" id="prod-a" placeholder="0" oninput="updateLiveEff(\'a\')">
+                            <input type="number" step="0.01" id="prod-a" placeholder="0" oninput="updateLiveEff('a')">
                         </div>
                         <div class="form-group">
                             <label for="weft-a">Weft Stops (Count)</label>
-                            <input type="number" id="weft-a" placeholder="0" oninput="updateLiveEff(\'a\')">
+                            <input type="number" id="weft-a" placeholder="0" oninput="updateLiveEff('a')">
                         </div>
                         <div class="form-group">
                             <label for="down-a">Downtime (Minit)</label>
@@ -688,11 +692,11 @@
                     <div class="shift-inputs">
                         <div class="form-group">
                             <label for="prod-b">Production</label>
-                            <input type="number" step="0.01" id="prod-b" placeholder="0" oninput="updateLiveEff(\'b\')">
+                            <input type="number" step="0.01" id="prod-b" placeholder="0" oninput="updateLiveEff('b')">
                         </div>
                         <div class="form-group">
                             <label for="weft-b">Weft Stops (Count)</label>
-                            <input type="number" id="weft-b" placeholder="0" oninput="updateLiveEff(\'b\')">
+                            <input type="number" id="weft-b" placeholder="0" oninput="updateLiveEff('b')">
                         </div>
                         <div class="form-group">
                             <label for="down-b">Downtime (Minit)</label>
@@ -709,11 +713,11 @@
                     <div class="shift-inputs">
                         <div class="form-group">
                             <label for="prod-c">Production</label>
-                            <input type="number" step="0.01" id="prod-c" placeholder="0" oninput="updateLiveEff(\'c\')">
+                            <input type="number" step="0.01" id="prod-c" placeholder="0" oninput="updateLiveEff('c')">
                         </div>
                         <div class="form-group">
                             <label for="weft-c">Weft Stops (Count)</label>
-                            <input type="number" id="weft-c" placeholder="0" oninput="updateLiveEff(\'c\')">
+                            <input type="number" id="weft-c" placeholder="0" oninput="updateLiveEff('c')">
                         </div>
                         <div class="form-group">
                             <label for="down-c">Downtime (Minit)</label>
@@ -747,7 +751,7 @@
                     <button type="button" id="btn-all-dates" class="btn btn-all no-print" onclick="toggleAllDates()">ALL</button>
                 </div>
                 <button type="button" id="btn-export-excel" class="btn btn-excel no-print" onclick="exportCSV()">Export Excel (CSV)</button>
-                <button type="button" id="btn-print-pdf" class="btn btn-print no-print" onclick="window.print()">Print / PDF</button>
+                <button type="button" id="btn-print-pdf" class="btn btn-print no-print" onclick="printSheet()">Print / PDF</button>
             </div>
         </div>
 
@@ -987,23 +991,39 @@
         if (existing) {
             if (currentRole === 'admin') editingOriginalRecord = JSON.parse(JSON.stringify(existing));
             if (currentRole === 'entry') {
-                resetForm(true);
+                // Existing records remain protected from Entry User edits.
+                resetShiftFieldsOnly();
+                document.getElementById('item-name').value = existing.itemName || document.getElementById('item-name').value;
+                document.getElementById('rpm').value = existing.rpm || getLatestRpmForMachine(loomNo);
+                alert('This Loom entry for ' + date + ' already exists. Only Admin can edit existing entries.');
                 return;
             }
             document.getElementById('item-name').value = existing.itemName || '';
-            document.getElementById('rpm').value = existing.rpm || '';
+            document.getElementById('rpm').value = existing.rpm || getLatestRpmForMachine(loomNo);
             document.getElementById('remarks').value = existing.remarks || '';
             ['a', 'b', 'c'].forEach(s => {
-                document.getElementById('prod-' + s).value = existing.shifts[s].prod !== '' ? existing.shifts[s].prod : '';
-                document.getElementById('weft-' + s).value = existing.shifts[s].weft !== '' ? existing.shifts[s].weft : '';
-                document.getElementById('down-' + s).value = existing.shifts[s].down !== '' ? existing.shifts[s].down : '';
+                const sh = (existing.shifts && existing.shifts[s]) || {};
+                document.getElementById('prod-' + s).value = sh.prod ?? '';
+                document.getElementById('weft-' + s).value = sh.weft ?? '';
+                document.getElementById('down-' + s).value = sh.down ?? '';
                 updateLiveEff(s);
             });
         } else {
-            resetForm(true);
-            // For a new date/entry, preload this Loom's latest saved RPM.
+            editingOriginalRecord = null;
+            resetShiftFieldsOnly();
+            // Item Name and Date remain as entered; RPM is loaded per selected Loom.
             document.getElementById('rpm').value = getLatestRpmForMachine(loomNo);
+            document.getElementById('remarks').value = '';
         }
+    }
+
+    function resetShiftFieldsOnly() {
+        ['a', 'b', 'c'].forEach(s => {
+            document.getElementById('prod-' + s).value = '';
+            document.getElementById('weft-' + s).value = '';
+            document.getElementById('down-' + s).value = '';
+            document.getElementById('eff-preview-' + s).textContent = 'Eff: 0.0%';
+        });
     }
 
     function updateLiveEff(shift) {
@@ -1029,15 +1049,11 @@
     }
 
     function resetForNextEntry() {
-        // Do not change entry-date: users may need to save many looms for one fixed date.
+        // Keep Date, Loom Number, Item Name and RPM after saving.
+        // Only the three shifts are cleared so the user can continue without re-entering details.
         editingOriginalRecord = null;
         adminEditedFields.clear();
-        document.getElementById('machine-search').value = '';
-        document.getElementById('loom-no').value = '';
-        document.getElementById('entry-form-wrapper').style.display = 'block';
         document.getElementById('machine-dropdown').style.display = 'none';
-        // Keep Item Name for the next Loom, just as the selected Date is kept.
-        document.getElementById('rpm').value = '';
         document.getElementById('remarks').value = '';
         ['a', 'b', 'c'].forEach(s => {
             document.getElementById('prod-' + s).value = '';
@@ -1152,7 +1168,8 @@
             if (!(oldShift && !prodChanged && !weftChanged && !downChanged)) {
                 if (prodNum === 0 && weftNum === 0 && rawDownNum === 0) {
                     down = downSource === '' || downSource == null ? '' : 0;
-                    run = downSource === '' || downSource == null ? '' : SHIFT_MINUTES;
+                    // All three shift inputs are zero/empty, so Running Time must be zero too.
+                    run = 0;
                     eff = '0.0';
                 } else if (downSource !== '' && downSource != null) {
                     const downNum = Math.max(0, Math.min(SHIFT_MINUTES, rawDownNum));
@@ -1176,12 +1193,13 @@
         const totalEff = effCount > 0 ? (effSum / effCount).toFixed(1) + '%' : '-';
 
         const record = {
+            ...(editBase || existing || {}),
             id: recordId,
             date,
             loomNo: parseInt(loomNo, 10),
             itemName,
             rpm,
-            shifts,
+            shifts: editBase ? { ...(editBase.shifts || {}), ...shifts } : shifts,
             totalProd: totalProd > 0 ? Number(totalProd.toFixed(2)) : 0,
             totalEff,
             remarks
@@ -1207,7 +1225,7 @@
             editingOriginalRecord = JSON.parse(JSON.stringify(record));
             adminEditedFields.clear();
         } else {
-            // Prepare for the next loom while keeping the exact date selected by the user.
+            // Keep Date, Loom, Item Name and RPM visible; clear only shift entry boxes.
             resetForNextEntry();
         }
 
@@ -1339,6 +1357,14 @@
             `;
             tbody.appendChild(tr);
         });
+    }
+
+    function printSheet() {
+        if (currentRole === 'guest') {
+            alert('Guest account is view-only. Printing is disabled.');
+            return;
+        }
+        window.print();
     }
 
     function exportCSV() {
