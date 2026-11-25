@@ -560,8 +560,15 @@
         body.guest-view #btn-print-pdf,
         /* Guest mode must never reveal the entry form, even after Back navigation. */
         body.guest-view #entry-section,
-        body.guest-view #entry-form-wrapper {
+        body.guest-view .entry-card,
+        body.guest-view #entry-form-wrapper,
+        body.guest-view #machine-search,
+        body.guest-view .machine-search-wrapper {
             display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            min-height: 0 !important;
+            overflow: hidden !important;
         }
 
         /* Best-effort screenshot deterrent for Guest: obscure the page when the
@@ -857,7 +864,15 @@
     const adminEditedFields = new Set();
 
     document.addEventListener('input', function(e) {
-        if (currentRole === 'admin' && e.target && e.target.id &&
+        if (!e.target || !e.target.id) return;
+        // Keep the latest Item Name available for the next entry and after refresh.
+        if (e.target.id === 'item-name' && currentRole !== 'guest') {
+            try {
+                const value = e.target.value.trim();
+                if (value) localStorage.setItem('weaving_last_item_name', value);
+            } catch (err) {}
+        }
+        if (currentRole === 'admin' &&
             ['item-name','rpm','remarks','prod-a','prod-b','prod-c','weft-a','weft-b','weft-c','down-a','down-b','down-c'].includes(e.target.id)) {
             adminEditedFields.add(e.target.id);
         }
@@ -885,20 +900,73 @@
         setSession('guest');
     }
 
-    function setSession(role) {
+    function resetMainPageView() {
+        const itemPage = document.getElementById('item-wise-page');
+        const sheet = document.querySelector('.sheet-container');
+        const entryCard = document.querySelector('.entry-card');
+        if (itemPage) itemPage.style.display = 'none';
+        if (sheet) sheet.style.display = 'block';
+        if (entryCard) entryCard.style.display = 'block';
+        window.scrollTo(0, 0);
+    }
+
+    function setSession(role, restoreView = false) {
         currentRole = role;
         sessionStorage.setItem('weaving_user_role', role);
+        if (!restoreView) {
+            // A fresh login starts on today's date; refreshes within this session
+            // continue to restore the dates saved in sessionStorage.
+            sessionStorage.removeItem('weaving_current_view');
+            sessionStorage.removeItem('weaving_current_loom');
+            setDateInput('entry-date', todayStr);
+            setDateInput('filter-date', todayStr);
+            resetMainPageView();
+        }
         applyPermissions();
+        if (restoreView) restoreSavedView();
+    }
+
+    function restoreSavedView() {
+        const savedView = sessionStorage.getItem('weaving_current_view') || 'home';
+        if (savedView === 'item-wise') {
+            showItemWisePage();
+        } else if (savedView === 'entry-form') {
+            const loom = sessionStorage.getItem('weaving_current_loom');
+            if (loom && currentRole !== 'guest') selectMachine(Number(loom));
+        }
     }
 
     function handleLogout() {
         currentRole = null;
+        document.body.classList.remove('guest-view');
         sessionStorage.removeItem('weaving_user_role');
+        sessionStorage.removeItem('weaving_current_view');
+        sessionStorage.removeItem('weaving_current_loom');
+        // Do not carry a previous user's selected date into the next login.
+        sessionStorage.removeItem('weaving_entry-date_saved');
+        sessionStorage.removeItem('weaving_filter-date_saved');
         if (syncTimer) clearInterval(syncTimer);
         document.getElementById('login-userid').value = '';
         document.getElementById('login-password').value = '';
+        resetMainPageView();
         document.getElementById('app-container').style.display = 'none';
         document.getElementById('login-screen').style.display = 'flex';
+    }
+
+    function enforceGuestEntryLock() {
+        if (currentRole !== 'guest') return;
+        document.body.classList.add('guest-view');
+        ['entry-section', 'entry-form-wrapper'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.style.setProperty('display', 'none', 'important');
+                el.style.setProperty('visibility', 'hidden', 'important');
+            }
+        });
+        document.querySelectorAll('.entry-card, .machine-search-wrapper').forEach(el => {
+            el.style.setProperty('display', 'none', 'important');
+            el.style.setProperty('visibility', 'hidden', 'important');
+        });
     }
 
     function applyPermissions() {
@@ -925,6 +993,9 @@
             actionTh.style.display = '';
         }
 
+        // Re-apply the Guest lock after role layout changes (desktop and mobile).
+        enforceGuestEntryLock();
+
         // Load local cache first for instant display, then sync with Firebase
         try {
             cachedRecords = JSON.parse(localStorage.getItem(LOCAL_BACKUP_KEY)) || [];
@@ -937,6 +1008,47 @@
         if (syncTimer) clearInterval(syncTimer);
         syncTimer = setInterval(fetchCloudRecords, 4000);
     }
+
+    // Enter-key navigation works on desktop and mobile keyboards.
+    document.addEventListener('keydown', function(e) {
+        if (e.key !== 'Enter') return;
+        const active = document.activeElement;
+        if (!active) return;
+
+        if (active.id === 'login-userid') {
+            e.preventDefault();
+            document.getElementById('login-password').focus();
+            return;
+        }
+        if (active.id === 'login-password') {
+            e.preventDefault();
+            handleLogin();
+            return;
+        }
+
+        if (currentRole !== 'entry' && currentRole !== 'admin') return;
+        const entryArea = document.getElementById('entry-section');
+        if (!entryArea || !entryArea.contains(active)) return;
+
+        const ids = ['entry-date','item-name','rpm',
+            'prod-a','weft-a','down-a','prod-b','weft-b','down-b',
+            'prod-c','weft-c','down-c','remarks'];
+        const fields = ids.map(id => document.getElementById(id)).filter(el =>
+            el && !el.disabled && !el.readOnly && el.offsetParent !== null
+        );
+
+        if (active.id === 'machine-search') {
+            e.preventDefault();
+            document.getElementById('entry-date')?.focus();
+            return;
+        }
+
+        const index = fields.indexOf(active);
+        if (index >= 0) {
+            e.preventDefault();
+            if (index < fields.length - 1) fields[index + 1].focus();
+        }
+    }, true);
 
     // Guest users may view records, but cannot copy, cut, print, or export them.
     document.addEventListener('copy', function(e) {
@@ -1003,7 +1115,7 @@
     (function initSession() {
         const savedRole = sessionStorage.getItem('weaving_user_role');
         if (savedRole) {
-            setSession(savedRole);
+            setSession(savedRole, true);
         }
     })();
 
@@ -1031,6 +1143,10 @@
         const pickerId = inputId + '-picker';
         const picker = document.getElementById(pickerId);
         if (picker) picker.value = isoDate || '';
+        // Remember the chosen date so refresh keeps the same date on every device.
+        try {
+            if (isoDate) sessionStorage.setItem('weaving_' + inputId + '_saved', isoDate);
+        } catch (e) {}
     }
 
     function openDatePicker(pickerId) {
@@ -1056,8 +1172,13 @@
     // Set default dates in DD-MM-YYYY format.
     const now = new Date();
     const todayStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
-    setDateInput('entry-date', todayStr);
-    setDateInput('filter-date', todayStr);
+    let savedEntryDate = '', savedFilterDate = '';
+    try {
+        savedEntryDate = sessionStorage.getItem('weaving_entry-date_saved') || '';
+        savedFilterDate = sessionStorage.getItem('weaving_filter-date_saved') || '';
+    } catch (e) {}
+    setDateInput('entry-date', savedEntryDate || todayStr);
+    setDateInput('filter-date', savedFilterDate || todayStr);
 
     // Machine Search Logic (1 to 324)
     const allMachines = Array.from({ length: 324 }, (_, i) => i + 1);
@@ -1092,6 +1213,10 @@
     }
 
     function selectMachine(num) {
+        if (currentRole !== 'guest') {
+            sessionStorage.setItem('weaving_current_view', 'entry-form');
+            sessionStorage.setItem('weaving_current_loom', String(num));
+        }
         document.getElementById('machine-search').value = 'Loom - ' + num;
         document.getElementById('machine-dropdown').style.display = 'none';
         document.getElementById('entry-form-wrapper').style.display = 'block';
@@ -1116,6 +1241,7 @@
 
     function checkExistingRecord() {
         const date = getISODate('entry-date');
+        if (date) setDateInput('entry-date', date);
         const loomNo = document.getElementById('loom-no').value;
         if (!date || !loomNo) return;
 
@@ -1144,6 +1270,11 @@
         } else {
             editingOriginalRecord = null;
             resetShiftFieldsOnly();
+            // Keep the last successfully saved Item Name for the next entry and after refresh.
+            const itemField = document.getElementById('item-name');
+            if (!itemField.value.trim()) {
+                try { itemField.value = localStorage.getItem('weaving_last_item_name') || ''; } catch (e) {}
+            }
             // Item Name and Date remain as entered; RPM is loaded per selected Loom.
             document.getElementById('rpm').value = getLatestRpmForMachine(loomNo);
             document.getElementById('remarks').value = '';
@@ -1183,10 +1314,14 @@
 
     function resetForNextEntry() {
         // Keep Date, Loom Number, Item Name and RPM after saving.
-        // Only the three shifts are cleared so the user can continue without re-entering details.
+        // Restore Item Name from local storage if another UI action cleared it.
         editingOriginalRecord = null;
         adminEditedFields.clear();
         document.getElementById('machine-dropdown').style.display = 'none';
+        const itemField = document.getElementById('item-name');
+        if (itemField && !itemField.value.trim()) {
+            try { itemField.value = localStorage.getItem('weaving_last_item_name') || ''; } catch (e) {}
+        }
         document.getElementById('remarks').value = '';
         ['a', 'b', 'c'].forEach(s => {
             document.getElementById('prod-' + s).value = '';
@@ -1202,7 +1337,10 @@
             document.getElementById('machine-search').value = '';
             document.getElementById('entry-form-wrapper').style.display = 'none';
         }
-        if (!keepLoom) document.getElementById('item-name').value = '';
+        if (!keepLoom) {
+            document.getElementById('item-name').value = '';
+            try { localStorage.removeItem('weaving_last_item_name'); } catch (e) {}
+        }
         document.getElementById('rpm').value = '';
         document.getElementById('remarks').value = '';
         ['a', 'b', 'c'].forEach(s => {
@@ -1266,6 +1404,11 @@
         const remarksInput = document.getElementById('remarks').value.trim();
         const itemName = editBase && !adminEditedFields.has('item-name') ? (editBase.itemName || '') : itemInput;
         const rpm = editBase && !adminEditedFields.has('rpm') ? (editBase.rpm || '') : rpmInput;
+        // Persist the Item Name before saving, so it remains available even if
+        // the form is refreshed or the next machine is selected immediately.
+        try {
+            if (itemName) localStorage.setItem('weaving_last_item_name', itemName);
+        } catch (e) {}
         const remarks = editBase && !adminEditedFields.has('remarks') ? (editBase.remarks || '') : remarksInput;
 
         const shifts = {};
@@ -1422,7 +1565,9 @@
 
     function filterByDate() {
         const rawDate = document.getElementById('filter-date').value.trim();
-        if (rawDate && !getISODate('filter-date')) { alert('Please enter a valid date as DD-MM-YYYY.'); return; }
+        const validDate = getISODate('filter-date');
+        if (rawDate && !validDate) { alert('Please enter a valid date as DD-MM-YYYY.'); return; }
+        if (validDate) setDateInput('filter-date', validDate);
         showAllDates = false;
         document.getElementById('btn-all-dates').classList.remove('active');
         renderTable();
@@ -1494,8 +1639,19 @@
         });
     }
 
+
+
+    // Re-check Guest permissions after browser Back/Forward, page restore, and layout changes.
+    window.addEventListener('pageshow', enforceGuestEntryLock);
+    window.addEventListener('popstate', enforceGuestEntryLock);
+    document.addEventListener('visibilitychange', function() {
+        if (!document.hidden) enforceGuestEntryLock();
+    });
+
     function showItemWisePage() {
         if (currentRole === 'guest' && !document.body.classList.contains('guest-view')) return;
+        sessionStorage.setItem('weaving_current_view', 'item-wise');
+        sessionStorage.removeItem('weaving_current_loom');
         document.querySelector('.entry-card').style.display = 'none';
         document.querySelector('.sheet-container').style.display = 'none';
         document.getElementById('item-wise-page').style.display = 'block';
@@ -1505,10 +1661,12 @@
     }
 
     function hideItemWisePage() {
+        sessionStorage.setItem('weaving_current_view', 'home');
+        sessionStorage.removeItem('weaving_current_loom');
         document.getElementById('item-wise-page').style.display = 'none';
         /* Only entry/admin roles may see the form when returning from this page. */
         if (currentRole === 'guest') {
-            document.getElementById('entry-section').style.display = 'none';
+            enforceGuestEntryLock();
         } else {
             document.getElementById('entry-section').style.display = '';
         }
