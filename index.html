@@ -596,6 +596,15 @@
                 margin: 8mm;
             }
         }
+
+        .date-input-wrap { position: relative; display: flex; align-items: center; gap: 4px; min-width: 0; }
+        .date-input-wrap > input[type="text"] { min-width: 0; width: 100%; }
+        .calendar-btn { border: 1px solid #94a3b8; background: #fff; border-radius: 4px; padding: 4px 7px; cursor: pointer; font-size: 16px; line-height: 1.2; }
+        .native-date-picker { position: absolute; width: 1px; height: 1px; opacity: 0.01; right: 0; bottom: 0; border: 0; padding: 0; pointer-events:none; }
+        #entry-date, #filter-date { cursor:pointer; }
+        #item-wise-table th { background:#e2e8f0; color:#0f172a; }
+        #item-wise-table td, #item-wise-table tfoot td { padding:10px; border:1px solid #cbd5e1; text-align:center; }
+        #item-wise-table td:first-child { text-align:left; font-weight:600; }
     </style>
 </head>
 <body>
@@ -645,7 +654,10 @@
             <div class="general-grid">
                 <div class="form-group">
                     <label for="entry-date">Date</label>
-                    <input type="date" id="entry-date" onchange="checkExistingRecord()">
+                    <div class="date-input-wrap">
+                        <input type="text" id="entry-date" inputmode="numeric" placeholder="DD-MM-YYYY" maxlength="10" autocomplete="off" onclick="openDatePicker('entry-date-picker')" onchange="checkExistingRecord()">
+                        <input type="date" id="entry-date-picker" class="native-date-picker" onchange="datePickerChanged('entry-date-picker','entry-date','entry')">
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="loom-no">Loom Number</label>
@@ -747,11 +759,15 @@
             <div class="sheet-controls">
                 <div class="date-filter-box">
                     <label for="filter-date">Date:</label>
-                    <input type="date" id="filter-date" onchange="filterByDate()">
+                    <div class="date-input-wrap filter-date-wrap">
+                        <input type="text" id="filter-date" inputmode="numeric" placeholder="DD-MM-YYYY" maxlength="10" autocomplete="off" onclick="openDatePicker('filter-date-picker')" onchange="filterByDate()">
+                        <input type="date" id="filter-date-picker" class="native-date-picker" onchange="datePickerChanged('filter-date-picker','filter-date','filter')">
+                    </div>
                     <button type="button" id="btn-all-dates" class="btn btn-all no-print" onclick="toggleAllDates()">ALL</button>
                 </div>
                 <button type="button" id="btn-export-excel" class="btn btn-excel no-print" onclick="exportCSV()">Export Excel (CSV)</button>
                 <button type="button" id="btn-print-pdf" class="btn btn-print no-print" onclick="printSheet()">Print / PDF</button>
+                <button type="button" id="btn-item-wise" class="btn btn-excel no-print" style="background:#7c3aed;color:#fff;" onmouseover="this.style.background='#6d28d9'" onmouseout="this.style.background='#7c3aed'" onclick="showItemWisePage()">Item-wise Production</button>
             </div>
         </div>
 
@@ -792,6 +808,26 @@
             <tbody id="sheet-body">
                 <!-- Rows dynamically rendered here -->
             </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Item-wise Production Page -->
+<div id="item-wise-page" class="sheet-container" style="display:none; margin-top:18px;">
+    <div class="sheet-top-bar">
+        <div class="sheet-title">ITEM-WISE PRODUCTION</div>
+        <button type="button" class="btn btn-print" onclick="hideItemWisePage()">Back</button>
+    </div>
+    <div class="item-filter-row" style="display:flex;gap:12px;flex-wrap:wrap;margin:14px 0;align-items:end;">
+        <div class="form-group" style="min-width:150px;flex:1;"><label for="iw-date">Date</label><select id="iw-date" onchange="renderItemWise()"><option value="">All dates</option></select></div>
+        <div class="form-group" style="min-width:150px;flex:1;"><label for="iw-month">Month</label><select id="iw-month" onchange="renderItemWise()"><option value="">All months</option><option value="01">January</option><option value="02">February</option><option value="03">March</option><option value="04">April</option><option value="05">May</option><option value="06">June</option><option value="07">July</option><option value="08">August</option><option value="09">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select></div>
+        <div class="form-group" style="min-width:130px;flex:1;"><label for="iw-year">Year</label><select id="iw-year" onchange="renderItemWise()"><option value="">All years</option></select></div>
+    </div>
+    <div style="overflow-x:auto;">
+        <table id="item-wise-table" style="width:100%;border-collapse:collapse;min-width:480px;">
+            <thead><tr><th style="padding:10px;border:1px solid #cbd5e1;">Item</th><th style="padding:10px;border:1px solid #cbd5e1;">Machine Count</th><th style="padding:10px;border:1px solid #cbd5e1;">Production (yds)</th></tr></thead>
+            <tbody id="item-wise-body"></tbody>
+            <tfoot id="item-wise-foot"></tfoot>
         </table>
     </div>
 </div>
@@ -921,10 +957,57 @@
         }
     })();
 
-    // Set default dates
-    const todayStr = new Date().toISOString().split('T')[0];
-    document.getElementById('entry-date').value = todayStr;
-    document.getElementById('filter-date').value = todayStr;
+    // All date fields visibly use DD-MM-YYYY; records keep ISO YYYY-MM-DD internally.
+    function formatDateDMY(dateValue) {
+        if (!dateValue) return '';
+        const parts = String(dateValue).split('-');
+        if (parts.length !== 3) return dateValue;
+        return `${parts[2]}-${parts[1]}-${parts[0]}`;
+    }
+
+    function getISODate(inputId) {
+        const value = document.getElementById(inputId).value.trim();
+        if (!value) return '';
+        const match = value.match(/^(\d{1,2})[-/.](\d{1,2})[-/.](\d{4})$/);
+        if (!match) return '';
+        const day = Number(match[1]), month = Number(match[2]), year = Number(match[3]);
+        const date = new Date(Date.UTC(year, month - 1, day));
+        if (date.getUTCFullYear() !== year || date.getUTCMonth() !== month - 1 || date.getUTCDate() !== day) return '';
+        return `${String(year).padStart(4,'0')}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+    }
+
+    function setDateInput(inputId, isoDate) {
+        document.getElementById(inputId).value = formatDateDMY(isoDate);
+        const pickerId = inputId + '-picker';
+        const picker = document.getElementById(pickerId);
+        if (picker) picker.value = isoDate || '';
+    }
+
+    function openDatePicker(pickerId) {
+        const picker = document.getElementById(pickerId);
+        if (!picker) return;
+        const textId = pickerId.replace('-picker', '');
+        const iso = getISODate(textId);
+        if (iso) picker.value = iso;
+        try {
+            if (typeof picker.showPicker === 'function') picker.showPicker();
+            else picker.click();
+        } catch (e) { picker.click(); }
+    }
+
+    function datePickerChanged(pickerId, textId, target) {
+        const iso = document.getElementById(pickerId).value;
+        if (!iso) return;
+        setDateInput(textId, iso);
+        if (target === 'entry') checkExistingRecord();
+        else filterByDate();
+    }
+
+    // Set default dates in DD-MM-YYYY format.
+    const now = new Date();
+    const todayStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+    setDateInput('entry-date', todayStr);
+    setDateInput('filter-date', todayStr);
 
     // Machine Search Logic (1 to 324)
     const allMachines = Array.from({ length: 324 }, (_, i) => i + 1);
@@ -982,7 +1065,7 @@
     }
 
     function checkExistingRecord() {
-        const date = document.getElementById('entry-date').value;
+        const date = getISODate('entry-date');
         const loomNo = document.getElementById('loom-no').value;
         if (!date || !loomNo) return;
 
@@ -1111,10 +1194,10 @@
     async function saveEntry() {
         if (currentRole === 'guest') return;
 
-        const date = document.getElementById('entry-date').value;
+        const date = getISODate('entry-date');
         const loomNo = document.getElementById('loom-no').value;
         if (!date || !loomNo) {
-            alert('Please select Date and Loom No.');
+            alert('Please enter a valid date as DD-MM-YYYY and select Loom No.');
             return;
         }
 
@@ -1217,7 +1300,7 @@
 
         showAllDates = false;
         document.getElementById('btn-all-dates').classList.remove('active');
-        document.getElementById('filter-date').value = date;
+        setDateInput('filter-date', date);
 
         renderTable();
         if (editBase) {
@@ -1253,7 +1336,7 @@
 
         document.getElementById('machine-search').value = 'Loom - ' + rec.loomNo;
         document.getElementById('entry-form-wrapper').style.display = 'block';
-        document.getElementById('entry-date').value = rec.date;
+        setDateInput('entry-date', rec.date);
         document.getElementById('loom-no').value = rec.loomNo;
         document.getElementById('item-name').value = rec.itemName || '';
         document.getElementById('rpm').value = rec.rpm || '';
@@ -1288,6 +1371,8 @@
     }
 
     function filterByDate() {
+        const rawDate = document.getElementById('filter-date').value.trim();
+        if (rawDate && !getISODate('filter-date')) { alert('Please enter a valid date as DD-MM-YYYY.'); return; }
         showAllDates = false;
         document.getElementById('btn-all-dates').classList.remove('active');
         renderTable();
@@ -1307,7 +1392,7 @@
     function renderTable() {
         const tbody = document.getElementById('sheet-body');
         tbody.innerHTML = '';
-        const selectedDate = document.getElementById('filter-date').value;
+        const selectedDate = getISODate('filter-date');
         let records = [...cachedRecords];
 
         if (!showAllDates && selectedDate) {
@@ -1325,7 +1410,7 @@
 
         records.forEach(r => {
             const tr = document.createElement('tr');
-            const loomLabel = showAllDates ? `${r.loomNo} <br><small style="color:#64748b;">(${r.date})</small>` : r.loomNo;
+            const loomLabel = showAllDates ? `${r.loomNo} <br><small style="color:#64748b;">(${formatDateDMY(r.date)})</small>` : r.loomNo;
 
             const actionCell = currentRole === 'admin'
                 ? `<td class="no-print"><div class="action-btns"><button class="edit-btn" onclick="editRecord('${r.id}')">Edit</button><button class="del-btn" onclick="deleteRecord('${r.id}')">Del</button></div></td>`
@@ -1359,6 +1444,73 @@
         });
     }
 
+    function showItemWisePage() {
+        document.querySelector('.entry-card').style.display = 'none';
+        document.querySelector('.sheet-container').style.display = 'none';
+        document.getElementById('item-wise-page').style.display = 'block';
+        populateItemWiseFilters();
+        renderItemWise();
+        window.scrollTo({top:0, behavior:'smooth'});
+    }
+
+    function hideItemWisePage() {
+        document.getElementById('item-wise-page').style.display = 'none';
+        document.querySelector('.entry-card').style.display = '';
+        document.querySelector('.sheet-container').style.display = '';
+        window.scrollTo({top:0, behavior:'smooth'});
+    }
+
+    function populateItemWiseFilters() {
+        const dateSelect = document.getElementById('iw-date');
+        const yearSelect = document.getElementById('iw-year');
+        const oldDate = dateSelect.value, oldYear = yearSelect.value;
+        const dates = [...new Set(cachedRecords.map(r => r.date).filter(Boolean))].sort().reverse();
+        dateSelect.innerHTML = '<option value="">All dates</option>' + dates.map(d => `<option value="${d}">${formatDateDMY(d)}</option>`).join('');
+        const years = [...new Set(dates.map(d => d.slice(0,4)))].sort().reverse();
+        yearSelect.innerHTML = '<option value="">All years</option>' + years.map(y => `<option value="${y}">${y}</option>`).join('');
+        if (dates.includes(oldDate)) dateSelect.value = oldDate;
+        if (years.includes(oldYear)) yearSelect.value = oldYear;
+    }
+
+    function renderItemWise() {
+        const date = document.getElementById('iw-date').value;
+        const month = document.getElementById('iw-month').value;
+        const year = document.getElementById('iw-year').value;
+        let records = cachedRecords.filter(r => {
+            const d = String(r.date || '');
+            if (date && d !== date) return false;
+            if (month && d.slice(5,7) !== month) return false;
+            if (year && d.slice(0,4) !== year) return false;
+            return true;
+        });
+        const grouped = new Map();
+        records.forEach(r => {
+            const item = String(r.itemName || 'Unknown').trim() || 'Unknown';
+            if (!grouped.has(item)) grouped.set(item, {machines:new Set(), production:0});
+            const g = grouped.get(item);
+            g.machines.add(String(r.loomNo));
+            g.production += Number(r.totalProd) || 0;
+        });
+        const body = document.getElementById('item-wise-body');
+        const foot = document.getElementById('item-wise-foot');
+        body.innerHTML = ''; foot.innerHTML = '';
+        const rows = [...grouped.entries()].sort((a,b) => a[0].localeCompare(b[0]));
+        if (!rows.length) { body.innerHTML = '<tr><td colspan="3">No production records found.</td></tr>'; return; }
+        let totalMachines = new Set(), totalProduction = 0;
+        rows.forEach(([item,g]) => {
+            g.machines.forEach(m => totalMachines.add(m));
+            totalProduction += g.production;
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${escapeHtml(item)}</td><td>${g.machines.size}</td><td>${g.production.toFixed(2)}</td>`;
+            body.appendChild(tr);
+        });
+        foot.innerHTML = `<tr><td style="font-weight:800;">TOTAL</td><td style="font-weight:800;">${totalMachines.size}</td><td style="font-weight:800;">${totalProduction.toFixed(2)}</td></tr>`;
+    }
+
+    function escapeHtml(value) {
+        return String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    }
+
     function printSheet() {
         if (currentRole === 'guest') {
             alert('Guest account is view-only. Printing is disabled.');
@@ -1369,7 +1521,7 @@
 
     function exportCSV() {
         if (currentRole === 'guest') return;
-        const selectedDate = document.getElementById('filter-date').value;
+        const selectedDate = getISODate('filter-date');
         let records = [...cachedRecords];
         if (!showAllDates && selectedDate) {
             records = records.filter(r => r.date === selectedDate);
@@ -1390,7 +1542,7 @@
         ];
 
         const rows = records.map(r => [
-            r.date,
+            formatDateDMY(r.date),
             r.loomNo,
             `"${(r.itemName || '').replace(/"/g, '""')}"`,
             r.rpm || '',
