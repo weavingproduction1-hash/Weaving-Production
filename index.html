@@ -557,8 +557,19 @@
             -webkit-touch-callout: none !important;
         }
         body.guest-view #btn-export-excel,
-        body.guest-view #btn-print-pdf {
+        body.guest-view #btn-print-pdf,
+        /* Guest mode must never reveal the entry form, even after Back navigation. */
+        body.guest-view #entry-section,
+        body.guest-view #entry-form-wrapper {
             display: none !important;
+        }
+
+        /* Best-effort screenshot deterrent for Guest: obscure the page when the
+           browser loses focus or is sent to the background. This cannot stop OS capture. */
+        body.guest-view.guest-capture-guard #app-container {
+            filter: blur(18px) !important;
+            pointer-events: none !important;
+            user-select: none !important;
         }
 
         /* Print Layout */
@@ -645,7 +656,7 @@
         <div class="machine-selector-box">
             <label for="machine-search">Search Machine (Loom 1 - 324):</label>
             <div class="machine-search-wrapper">
-                <input type="text" id="machine-search" class="machine-search-input" placeholder="Type Loom No...." oninput="filterMachines()" onfocus="filterMachines()" autocomplete="off">
+                <input type="text" id="machine-search" class="machine-search-input" placeholder="Type Loom No. (e.g. 15)..." oninput="filterMachines()" onfocus="filterMachines()" autocomplete="off">
                 <div id="machine-dropdown" class="search-dropdown"></div>
             </div>
         </div>
@@ -767,7 +778,7 @@
                 </div>
                 <button type="button" id="btn-export-excel" class="btn btn-excel no-print" onclick="exportCSV()">Export Excel (CSV)</button>
                 <button type="button" id="btn-print-pdf" class="btn btn-print no-print" onclick="printSheet()">Print / PDF</button>
-                <button type="button" id="btn-item-wise" class="btn btn-excel no-print" style="background:#7c3aed;color:#fff;" onmouseover="this.style.background='#6d28d9'" onmouseout="this.style.background='#7c3aed'" onclick="showItemWisePage()">Item-wise Production</button>
+                <button type="button" id="btn-item-wise" class="btn btn-excel no-print" onclick="showItemWisePage()">Item-wise Production</button>
             </div>
         </div>
 
@@ -940,14 +951,53 @@
     document.addEventListener('dragstart', function(e) {
         if (currentRole === 'guest') e.preventDefault();
     });
+    document.addEventListener('selectstart', function(e) {
+        if (currentRole === 'guest') e.preventDefault();
+    }, true);
+    document.addEventListener('beforecopy', function(e) {
+        if (currentRole === 'guest') e.preventDefault();
+    }, true);
+    document.addEventListener('beforecut', function(e) {
+        if (currentRole === 'guest') e.preventDefault();
+    }, true);
     document.addEventListener('keydown', function(e) {
         if (currentRole !== 'guest') return;
         const key = (e.key || '').toLowerCase();
-        if ((e.ctrlKey || e.metaKey) && ['c', 'x', 's', 'p', 'a'].includes(key)) {
+        const blockedShortcut = ((e.ctrlKey || e.metaKey) && ['c', 'x', 's', 'p', 'a', 'insert'].includes(key))
+            || (e.shiftKey && key === 'insert');
+        if (blockedShortcut) {
             e.preventDefault();
             e.stopPropagation();
+            if (e.stopImmediatePropagation) e.stopImmediatePropagation();
         }
     }, true);
+
+    // Best-effort block for screenshot-related keyboard shortcuts in Guest mode.
+    // Operating-system screenshot tools may ignore browser keyboard handling.
+    document.addEventListener('keydown', function(e) {
+        if (currentRole !== 'guest') return;
+        const key = (e.key || '').toLowerCase();
+        const screenshotShortcut = key === 'printscreen'
+            || ((e.metaKey || e.ctrlKey) && e.shiftKey && ['4', '5', '3'].includes(key))
+            || (e.shiftKey && key === 's' && (e.metaKey || e.ctrlKey));
+        if (screenshotShortcut) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+        }
+    }, true);
+
+    // Blur the Guest page when focus is lost / app is backgrounded; restore on return.
+    window.addEventListener('blur', function() {
+        if (currentRole === 'guest') document.body.classList.add('guest-capture-guard');
+    });
+    window.addEventListener('focus', function() {
+        document.body.classList.remove('guest-capture-guard');
+    });
+    document.addEventListener('visibilitychange', function() {
+        if (currentRole !== 'guest') return;
+        document.body.classList.toggle('guest-capture-guard', document.hidden);
+    });
 
     // Check existing session on load
     (function initSession() {
@@ -1445,6 +1495,7 @@
     }
 
     function showItemWisePage() {
+        if (currentRole === 'guest' && !document.body.classList.contains('guest-view')) return;
         document.querySelector('.entry-card').style.display = 'none';
         document.querySelector('.sheet-container').style.display = 'none';
         document.getElementById('item-wise-page').style.display = 'block';
@@ -1455,7 +1506,12 @@
 
     function hideItemWisePage() {
         document.getElementById('item-wise-page').style.display = 'none';
-        document.querySelector('.entry-card').style.display = '';
+        /* Only entry/admin roles may see the form when returning from this page. */
+        if (currentRole === 'guest') {
+            document.getElementById('entry-section').style.display = 'none';
+        } else {
+            document.getElementById('entry-section').style.display = '';
+        }
         document.querySelector('.sheet-container').style.display = '';
         window.scrollTo({top:0, behavior:'smooth'});
     }
