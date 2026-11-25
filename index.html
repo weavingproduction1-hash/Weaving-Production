@@ -664,7 +664,7 @@
         <div class="machine-selector-box">
             <label for="machine-search">Search Machine (Loom 1 - 324):</label>
             <div class="machine-search-wrapper">
-                <input type="text" id="machine-search" class="machine-search-input" placeholder="Type Loom No. (e.g. 15)..." oninput="filterMachines()" onfocus="filterMachines()" autocomplete="off">
+                <input type="text" id="machine-search" class="machine-search-input" placeholder="Type Loom No..." oninput="filterMachines()" onfocus="filterMachines()" autocomplete="off">
                 <div id="machine-dropdown" class="search-dropdown"></div>
             </div>
         </div>
@@ -885,7 +885,7 @@
         const pass = document.getElementById('login-password').value.trim();
         const errBox = document.getElementById('login-error');
 
-        if (uid === 'production' && pass === 'Pro@123') {
+        if (uid === 'Production' && pass === 'Pro@123') {
             errBox.style.display = 'none';
             setSession('entry');
         } else if (uid === 'Production' && pass === 'Giyas@7252') {
