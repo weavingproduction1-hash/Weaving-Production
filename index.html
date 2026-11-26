@@ -297,7 +297,7 @@
             margin-bottom: 5px;
         }
 
-        .form-group input {
+        .form-group input, .form-group select {
             padding: 9px 10px;
             border: 1px solid #94a3b8;
             border-radius: 5px;
@@ -307,7 +307,7 @@
             width: 100%;
         }
 
-        .form-group input:focus {
+        .form-group input:focus, .form-group select:focus {
             border-color: var(--primary);
             box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.15);
         }
@@ -552,10 +552,15 @@
         }
 
         /* Guest is strictly view-only: prevent selecting/copying page content. */
-        body.guest-view, body.guest-view * {
+        body.guest-view, body.guest-view *,
+        body.entry-view, body.entry-view * {
             -webkit-user-select: none !important;
             user-select: none !important;
             -webkit-touch-callout: none !important;
+        }
+        body.entry-view input, body.entry-view textarea, body.entry-view [contenteditable="true"] {
+            -webkit-user-select: text !important;
+            user-select: text !important;
         }
         body.guest-view #btn-export-excel,
         body.guest-view #btn-print-pdf,
@@ -624,6 +629,234 @@
         #item-wise-table th { background:#e2e8f0; color:#0f172a; }
         #item-wise-table td, #item-wise-table tfoot td { padding:10px; border:1px solid #cbd5e1; text-align:center; }
         #item-wise-table td:first-child { text-align:left; font-weight:600; }
+        .header-click-btn {
+            background: #dbeafe;
+            color: #1e3a8a;
+            border: 1px solid #93c5fd;
+            border-radius: 4px;
+            padding: 5px 10px;
+            font-weight: 800;
+            font-size: 12px;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .header-click-btn:hover {
+            background: #bfdbfe;
+        }
+        .header-click-btn.stop-hdr {
+            background: #fee2e2;
+            color: #991b1b;
+            border-color: #fca5a5;
+        }
+        .header-click-btn.stop-hdr:hover {
+            background: #fecaca;
+        }
+        .reason-group-title {
+            font-size: 13px;
+            font-weight: 800;
+            color: #1e293b;
+            background: #e2e8f0;
+            padding: 6px 10px;
+            border-radius: 4px;
+            margin: 10px 0 6px 0;
+        }
+                .stop-entry-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            margin: 14px 0;
+        }
+        @media (max-width: 600px) {
+            .stop-entry-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .stop-records-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 620px;
+            margin-top: 14px;
+        }
+        .stop-records-table th, .stop-records-table td {
+            padding: 9px;
+            border: 1px solid #cbd5e1;
+            text-align: center;
+            font-size: 12px;
+        }
+        .stop-records-table th {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+        .sm-machine-link {
+            background: none;
+            border: none;
+            color: #1d4ed8;
+            font-weight: 800;
+            font-size: 12px;
+            text-decoration: underline;
+            cursor: pointer;
+            padding: 2px 4px;
+        }
+        .sm-machine-link:hover {
+            color: #1e3a8a;
+        }
+        .sm-machine-locked {
+            font-weight: 700;
+            color: #0f172a;
+        }
+        #machine-reason-box {
+            margin-top: 16px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            background: #f8fafc;
+            padding: 14px;
+            display: none;
+        }
+        #machine-reason-box h4 {
+            font-size: 14px;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .reason-item {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid #1d4ed8;
+            border-radius: 4px;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+        .reason-item.stop-reason {
+            border-left-color: #dc2626;
+        }
+        .sm-col-wrap {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            position: relative;
+        }
+        .sm-filter-btn {
+            background: #ffffff;
+            color: #1e293b;
+            border: 1px solid #94a3b8;
+            border-radius: 3px;
+            padding: 1px 5px;
+            font-size: 10px;
+            font-weight: 800;
+            cursor: pointer;
+            line-height: 1.2;
+        }
+        .sm-filter-btn:hover {
+            background: #eff6ff;
+            border-color: var(--primary);
+        }
+        .sm-filter-btn.active {
+            background: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary);
+        }
+        .sm-excel-dropdown {
+            position: fixed;
+            z-index: 2500;
+            background: #ffffff;
+            border: 1px solid #475569;
+            border-radius: 6px;
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.22);
+            min-width: 210px;
+            max-width: 280px;
+            padding: 8px;
+            text-align: left;
+            font-size: 12px;
+            color: #0f172a;
+        }
+        .sm-excel-search {
+            width: 100%;
+            padding: 6px 8px;
+            border: 1px solid #94a3b8;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-bottom: 6px;
+            outline: none;
+        }
+        .sm-excel-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 6px;
+            margin-bottom: 6px;
+            font-size: 11px;
+        }
+        .sm-excel-link-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-weight: 700;
+            cursor: pointer;
+            padding: 0;
+            font-size: 11px;
+            text-decoration: underline;
+        }
+        .sm-excel-options {
+            max-height: 170px;
+            overflow-y: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            padding: 4px 6px;
+            background: #f8fafc;
+            margin-bottom: 8px;
+        }
+        .sm-excel-option {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 3px 2px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .sm-excel-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 6px;
+        }
+        .sm-excel-apply {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .sm-excel-clear {
+            background: #e2e8f0;
+            color: #1e293b;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        body:not(.admin-view) .edit-btn,
+        body:not(.admin-view) .del-btn,
+        body:not(.admin-view) #action-th,
+        body:not(.admin-view) #sm-action-th {
+            display: none !important;
+        }
+        body.entry-view #btn-export-excel,
+        body.entry-view #btn-print-pdf {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
@@ -664,7 +897,7 @@
         <div class="machine-selector-box">
             <label for="machine-search">Search Machine (Loom 1 - 324):</label>
             <div class="machine-search-wrapper">
-                <input type="text" id="machine-search" class="machine-search-input" placeholder="Type Loom No..." oninput="filterMachines()" onfocus="filterMachines()" autocomplete="off">
+                <input type="text" id="machine-search" class="machine-search-input" placeholder="Type or Select Loom No..." oninput="filterMachines()" onfocus="openMachineDropdown()" autocomplete="off">
                 <div id="machine-dropdown" class="search-dropdown"></div>
             </div>
         </div>
@@ -835,7 +1068,10 @@
 <div id="item-wise-page" class="sheet-container" style="display:none; margin-top:18px;">
     <div class="sheet-top-bar">
         <div class="sheet-title">ITEM-WISE PRODUCTION</div>
-        <button type="button" class="btn btn-print" onclick="hideItemWisePage()">Back</button>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+            <button type="button" class="btn btn-save" id="btn-problem-entry" onclick="showStopMachineEntryPage()">Problem</button>
+            <button type="button" class="btn btn-print" onclick="hideItemWisePage()">Back</button>
+        </div>
     </div>
     <div class="item-filter-row" style="display:flex;gap:12px;flex-wrap:wrap;margin:14px 0;align-items:end;">
         <div class="form-group" style="min-width:150px;flex:1;"><label for="iw-date">Date</label><select id="iw-date" onchange="renderItemWise()"><option value="">All dates</option></select></div>
@@ -843,13 +1079,143 @@
         <div class="form-group" style="min-width:130px;flex:1;"><label for="iw-year">Year</label><select id="iw-year" onchange="renderItemWise()"><option value="">All years</option></select></div>
     </div>
     <div style="overflow-x:auto;">
-        <table id="item-wise-table" style="width:100%;border-collapse:collapse;min-width:480px;">
-            <thead><tr><th style="padding:10px;border:1px solid #cbd5e1;">Item</th><th style="padding:10px;border:1px solid #cbd5e1;">Machine Count</th><th style="padding:10px;border:1px solid #cbd5e1;">Production (yds)</th></tr></thead>
+        <table id="item-wise-table" style="width:100%;border-collapse:collapse;min-width:560px;">
+            <thead>
+                <tr>
+                    <th style="padding:10px;border:1px solid #cbd5e1;">Item Name</th>
+                    <th style="padding:10px;border:1px solid #cbd5e1;"><button type="button" class="header-click-btn" onclick="showAllItemMachineReasons('running')">Runing Machine</button></th>
+                    <th style="padding:10px;border:1px solid #cbd5e1;"><button type="button" class="header-click-btn stop-hdr" onclick="showAllItemMachineReasons('stop')">Stop Machine</button></th>
+                    <th style="padding:10px;border:1px solid #cbd5e1;">Production (YDS)</th>
+                </tr>
+            </thead>
             <tbody id="item-wise-body"></tbody>
             <tfoot id="item-wise-foot"></tfoot>
         </table>
     </div>
+    <div id="machine-reason-box">
+        <h4>
+            <span id="machine-reason-title">Details</span>
+            <button type="button" class="btn btn-reset" style="padding:4px 10px;font-size:11px;" onclick="closeMachineReasonBox()">Close</button>
+        </h4>
+        <div id="machine-reason-list"></div>
+    </div>
 </div>
+
+<!-- Stop Machine Entry Page -->
+<div id="stop-machine-page" class="sheet-container" style="display:none; margin-top:18px;">
+    <div class="sheet-top-bar">
+        <div class="sheet-title">STOP MACHINE ENTRY</div>
+        <button type="button" class="btn btn-print" onclick="hideStopMachineEntryPage()">Back</button>
+    </div>
+
+    <div class="stop-entry-grid">
+        <div class="form-group">
+            <label for="sm-machine-no">মেশিন নাম্বার (Machine Number)</label>
+            <input type="text" id="sm-machine-no" list="sm-loom-list" placeholder="Type or select Loom No. (1 - 324)" oninput="onStopMachineInput()">
+            <datalist id="sm-loom-list"></datalist>
+        </div>
+        <div class="form-group">
+            <label for="sm-item-name">আইটেম নেম (Item Name)</label>
+            <input type="text" id="sm-item-name" placeholder="Enter Item Name">
+        </div>
+        <div class="form-group">
+            <label for="sm-stop-date">বন্ধের তারিখ (Stop Date)</label>
+            <div class="date-input-wrap">
+                <input type="text" id="sm-stop-date" inputmode="numeric" placeholder="DD-MM-YYYY" maxlength="10" autocomplete="off" onclick="openDatePicker('sm-stop-date-picker')">
+                <input type="date" id="sm-stop-date-picker" class="native-date-picker" onchange="datePickerChanged('sm-stop-date-picker','sm-stop-date','stop')">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="sm-stop-time">বন্ধের সময় (Stop Time)</label>
+            <input type="time" id="sm-stop-time">
+        </div>
+        <div class="form-group" style="grid-column: 1 / -1;">
+            <label for="sm-stop-reason">বন্ধের কারণ (Stop Reason)</label>
+            <input type="text" id="sm-stop-reason" placeholder="Enter reason why machine stopped...">
+        </div>
+        <div class="form-group" id="sm-start-date-group" style="display:none;">
+            <label for="sm-start-date">চালুর তারিখ (Start / Running Date)</label>
+            <div class="date-input-wrap">
+                <input type="text" id="sm-start-date" inputmode="numeric" placeholder="DD-MM-YYYY" maxlength="10" autocomplete="off" onclick="openDatePicker('sm-start-date-picker')">
+                <input type="date" id="sm-start-date-picker" class="native-date-picker" onchange="datePickerChanged('sm-start-date-picker','sm-start-date','start')">
+            </div>
+        </div>
+        <div class="form-group" id="sm-start-time-group" style="display:none;">
+            <label for="sm-start-time">চালুর সময় (Start / Running Time)</label>
+            <input type="time" id="sm-start-time">
+        </div>
+    </div>
+
+    <div class="form-actions" style="margin-bottom: 18px;">
+        <button type="button" class="btn btn-reset" onclick="resetStopMachineForm()">Clear</button>
+        <button type="button" class="btn btn-save" id="sm-save-btn" onclick="saveStopMachineEntry()">Save Stop Machine</button>
+    </div>
+
+    
+
+    <div style="overflow-x:auto;">
+        <table class="stop-records-table">
+            <thead>
+                <tr>
+                    <th><span class="sm-col-wrap">মেশিন নাম্বার <button type="button" class="sm-filter-btn" id="sm-fbtn-loom" onclick="toggleStopColumnFilter('loom', event)" title="Filter">▾</button></span></th>
+                    <th><span class="sm-col-wrap">আইটেম নেম <button type="button" class="sm-filter-btn" id="sm-fbtn-item" onclick="toggleStopColumnFilter('item', event)" title="Filter">▾</button></span></th>
+                    <th><span class="sm-col-wrap">বন্ধের তারিখ <button type="button" class="sm-filter-btn" id="sm-fbtn-date" onclick="toggleStopColumnFilter('date', event)" title="Filter">▾</button></span></th>
+                    <th><span class="sm-col-wrap">বন্ধের সময় <button type="button" class="sm-filter-btn" id="sm-fbtn-time" onclick="toggleStopColumnFilter('time', event)" title="Filter">▾</button></span></th>
+                    <th><span class="sm-col-wrap">বন্ধের কারণ <button type="button" class="sm-filter-btn" id="sm-fbtn-reason" onclick="toggleStopColumnFilter('reason', event)" title="Filter">▾</button></span></th>
+                    <th><span class="sm-col-wrap">চালুর তারিখ <button type="button" class="sm-filter-btn" id="sm-fbtn-startDate" onclick="toggleStopColumnFilter('startDate', event)" title="Filter">▾</button></span></th>
+                    <th><span class="sm-col-wrap">চালুর সময় <button type="button" class="sm-filter-btn" id="sm-fbtn-startTime" onclick="toggleStopColumnFilter('startTime', event)" title="Filter">▾</button></span></th>
+                    <th id="sm-action-th">Action</th>
+                </tr>
+            </thead>
+            <tbody id="stop-machine-list-body"></tbody>
+        </table>
+    </div>
+
+    <div id="monthly-stop-minutes-section" style="margin-top: 22px;">
+        <div class="sheet-top-bar" style="margin-bottom: 12px;">
+            <div class="sheet-title" style="font-size: 15px;">মাসিক মেশিন বন্ধের সময় (MONTHLY MACHINE STOP MINUTES)</div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+                <div class="form-group" style="min-width:140px;">
+                    <label for="sm-summary-month">মাস (Month)</label>
+                    <select id="sm-summary-month" onchange="renderMonthlyStopMinutes()">
+                        <option value="">All Months</option>
+                        <option value="01">January</option>
+                        <option value="02">February</option>
+                        <option value="03">March</option>
+                        <option value="04">April</option>
+                        <option value="05">May</option>
+                        <option value="06">June</option>
+                        <option value="07">July</option>
+                        <option value="08">August</option>
+                        <option value="09">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                </div>
+                <div class="form-group" style="min-width:120px;">
+                    <label for="sm-summary-year">বছর (Year)</label>
+                    <select id="sm-summary-year" onchange="renderMonthlyStopMinutes()">
+                        <option value="">All Years</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div style="overflow-x:auto;">
+            <table class="stop-records-table" id="monthly-stop-minutes-table">
+                <thead>
+                    <tr>
+                        <th>মেশিন নাম্বার</th>
+                        <th>মাস / বছর</th>
+                        <th>মোট বন্ধের সময় (মিনিট)</th>
+                    </tr>
+                </thead>
+                <tbody id="monthly-stop-minutes-body"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
 
 <script>
     const FIREBASE_DB_URL = "https://weaving-production-default-rtdb.asia-southeast1.firebasedatabase.app";
@@ -859,14 +1225,13 @@
     let showAllDates = false;
     let cachedRecords = [];
     let syncTimer = null;
-    // Keeps the original record while Admin edits, so untouched fields are never overwritten.
     let editingOriginalRecord = null;
-    // Tracks only fields the Admin deliberately changes while editing an existing record.
     const adminEditedFields = new Set();
+    let itemWiseDetailStore = new Map();
+    let activeReasonType = null;
 
     document.addEventListener('input', function(e) {
         if (!e.target || !e.target.id) return;
-        // Keep the latest Item Name available for the next entry and after refresh.
         if (e.target.id === 'item-name' && currentRole !== 'guest') {
             try {
                 const value = e.target.value.trim();
@@ -879,7 +1244,6 @@
         }
     });
 
-    // Login Logic
     function handleLogin() {
         const uid = document.getElementById('login-userid').value.trim();
         const pass = document.getElementById('login-password').value.trim();
@@ -915,8 +1279,6 @@
         currentRole = role;
         sessionStorage.setItem('weaving_user_role', role);
         if (!restoreView) {
-            // A fresh login starts on today's date; refreshes within this session
-            // continue to restore the dates saved in sessionStorage.
             sessionStorage.removeItem('weaving_current_view');
             sessionStorage.removeItem('weaving_current_loom');
             setDateInput('entry-date', todayStr);
@@ -934,16 +1296,17 @@
         } else if (savedView === 'entry-form') {
             const loom = sessionStorage.getItem('weaving_current_loom');
             if (loom && currentRole !== 'guest') selectMachine(Number(loom));
+        } else if (savedView === 'stop-machine' && (currentRole === 'entry' || currentRole === 'admin')) {
+            showStopMachineEntryPage();
         }
     }
 
     function handleLogout() {
         currentRole = null;
-        document.body.classList.remove('guest-view');
+        document.body.classList.remove('guest-view', 'entry-view');
         sessionStorage.removeItem('weaving_user_role');
         sessionStorage.removeItem('weaving_current_view');
         sessionStorage.removeItem('weaving_current_loom');
-        // Do not carry a previous user's selected date into the next login.
         sessionStorage.removeItem('weaving_entry-date_saved');
         sessionStorage.removeItem('weaving_filter-date_saved');
         if (syncTimer) clearInterval(syncTimer);
@@ -957,6 +1320,7 @@
     function enforceGuestEntryLock() {
         if (currentRole !== 'guest') return;
         document.body.classList.add('guest-view');
+        document.body.classList.remove('entry-view');
         ['entry-section', 'entry-form-wrapper'].forEach(id => {
             const el = document.getElementById(id);
             if (el) {
@@ -977,27 +1341,54 @@
         const roleBadge = document.getElementById('current-role-display');
         const entrySection = document.getElementById('entry-section');
         const actionTh = document.getElementById('action-th');
+        const problemBtn = document.getElementById('btn-problem-entry');
+        const exportBtn = document.getElementById('btn-export-excel');
+        const printBtn = document.getElementById('btn-print-pdf');
 
         document.body.classList.toggle('guest-view', currentRole === 'guest');
+        document.body.classList.toggle('entry-view', currentRole === 'entry');
+        document.body.classList.toggle('admin-view', currentRole === 'admin');
 
+        const problemBtns = document.querySelectorAll('#btn-problem-entry');
         if (currentRole === 'guest') {
             roleBadge.textContent = 'Role: Guest (View Only)';
-            entrySection.style.display = 'none';
-            actionTh.style.display = 'none';
+            entrySection.style.setProperty('display', 'none', 'important');
+            actionTh.style.setProperty('display', 'none', 'important');
+            problemBtns.forEach(btn => {
+                btn.style.removeProperty('display');
+                btn.style.removeProperty('visibility');
+                btn.style.display = 'inline-block';
+                btn.style.visibility = 'visible';
+            });
+            if (exportBtn) exportBtn.style.setProperty('display', 'none', 'important');
+            if (printBtn) printBtn.style.setProperty('display', 'none', 'important');
         } else if (currentRole === 'entry') {
-            roleBadge.textContent = 'Role: Entry User';
+            roleBadge.textContent = 'Role: Entry User (Entry Only)';
             entrySection.style.display = 'block';
-            actionTh.style.display = 'none';
+            actionTh.style.setProperty('display', 'none', 'important');
+            problemBtns.forEach(btn => {
+                btn.style.removeProperty('display');
+                btn.style.removeProperty('visibility');
+                btn.style.display = 'inline-block';
+            });
+            if (exportBtn) exportBtn.style.setProperty('display', 'none', 'important');
+            if (printBtn) printBtn.style.setProperty('display', 'none', 'important');
         } else if (currentRole === 'admin') {
             roleBadge.textContent = 'Role: Admin (Full Access)';
             entrySection.style.display = 'block';
             actionTh.style.display = '';
+            problemBtns.forEach(btn => {
+                btn.style.removeProperty('display');
+                btn.style.removeProperty('visibility');
+                btn.style.display = 'inline-block';
+            });
+            if (exportBtn) exportBtn.style.display = '';
+            if (printBtn) printBtn.style.display = '';
         }
 
-        // Re-apply the Guest lock after role layout changes (desktop and mobile).
+        applyStopTableRolePermission();
         enforceGuestEntryLock();
 
-        // Load local cache first for instant display, then sync with Firebase
         try {
             cachedRecords = JSON.parse(localStorage.getItem(LOCAL_BACKUP_KEY)) || [];
         } catch (e) {
@@ -1010,7 +1401,6 @@
         syncTimer = setInterval(fetchCloudRecords, 4000);
     }
 
-    // Enter-key navigation works on desktop and mobile keyboards.
     document.addEventListener('keydown', function(e) {
         if (e.key !== 'Enter') return;
         const active = document.activeElement;
@@ -1051,32 +1441,38 @@
         }
     }, true);
 
-    // Guest users may view records, but cannot copy, cut, print, or export them.
+    function isRestrictedCopyRole() {
+        return currentRole === 'guest' || currentRole === 'entry';
+    }
+
     document.addEventListener('copy', function(e) {
-        if (currentRole === 'guest') e.preventDefault();
+        if (isRestrictedCopyRole()) e.preventDefault();
     });
     document.addEventListener('cut', function(e) {
-        if (currentRole === 'guest') e.preventDefault();
+        if (isRestrictedCopyRole()) e.preventDefault();
     });
     document.addEventListener('contextmenu', function(e) {
-        if (currentRole === 'guest') e.preventDefault();
+        if (isRestrictedCopyRole()) e.preventDefault();
     });
     document.addEventListener('dragstart', function(e) {
-        if (currentRole === 'guest') e.preventDefault();
+        if (isRestrictedCopyRole()) e.preventDefault();
     });
     document.addEventListener('selectstart', function(e) {
-        if (currentRole === 'guest') e.preventDefault();
+        if (!isRestrictedCopyRole()) return;
+        const t = e.target;
+        if (currentRole === 'entry' && t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
+        e.preventDefault();
     }, true);
     document.addEventListener('beforecopy', function(e) {
-        if (currentRole === 'guest') e.preventDefault();
+        if (isRestrictedCopyRole()) e.preventDefault();
     }, true);
     document.addEventListener('beforecut', function(e) {
-        if (currentRole === 'guest') e.preventDefault();
+        if (isRestrictedCopyRole()) e.preventDefault();
     }, true);
     document.addEventListener('keydown', function(e) {
-        if (currentRole !== 'guest') return;
+        if (!isRestrictedCopyRole()) return;
         const key = (e.key || '').toLowerCase();
-        const blockedShortcut = ((e.ctrlKey || e.metaKey) && ['c', 'x', 's', 'p', 'a', 'insert'].includes(key))
+        const blockedShortcut = ((e.ctrlKey || e.metaKey) && ['c', 'x', 's', 'p', 'insert'].includes(key))
             || (e.shiftKey && key === 'insert');
         if (blockedShortcut) {
             e.preventDefault();
@@ -1085,8 +1481,6 @@
         }
     }, true);
 
-    // Best-effort block for screenshot-related keyboard shortcuts in Guest mode.
-    // Operating-system screenshot tools may ignore browser keyboard handling.
     document.addEventListener('keydown', function(e) {
         if (currentRole !== 'guest') return;
         const key = (e.key || '').toLowerCase();
@@ -1100,7 +1494,6 @@
         }
     }, true);
 
-    // Blur the Guest page when focus is lost / app is backgrounded; restore on return.
     window.addEventListener('blur', function() {
         if (currentRole === 'guest') document.body.classList.add('guest-capture-guard');
     });
@@ -1112,7 +1505,6 @@
         document.body.classList.toggle('guest-capture-guard', document.hidden);
     });
 
-    // Check existing session on load
     (function initSession() {
         const savedRole = sessionStorage.getItem('weaving_user_role');
         if (savedRole) {
@@ -1120,7 +1512,6 @@
         }
     })();
 
-    // All date fields visibly use DD-MM-YYYY; records keep ISO YYYY-MM-DD internally.
     function formatDateDMY(dateValue) {
         if (!dateValue) return '';
         const parts = String(dateValue).split('-');
@@ -1144,7 +1535,6 @@
         const pickerId = inputId + '-picker';
         const picker = document.getElementById(pickerId);
         if (picker) picker.value = isoDate || '';
-        // Remember the chosen date so refresh keeps the same date on every device.
         try {
             if (isoDate) sessionStorage.setItem('weaving_' + inputId + '_saved', isoDate);
         } catch (e) {}
@@ -1167,10 +1557,9 @@
         if (!iso) return;
         setDateInput(textId, iso);
         if (target === 'entry') checkExistingRecord();
-        else filterByDate();
+        else if (target === 'filter') filterByDate();
     }
 
-    // Set default dates in DD-MM-YYYY format.
     const now = new Date();
     const todayStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
     let savedEntryDate = '', savedFilterDate = '';
@@ -1181,26 +1570,16 @@
     setDateInput('entry-date', savedEntryDate || todayStr);
     setDateInput('filter-date', savedFilterDate || todayStr);
 
-    // Machine Search Logic (1 to 324)
     const allMachines = Array.from({ length: 324 }, (_, i) => i + 1);
 
-    function filterMachines() {
-        const input = document.getElementById('machine-search');
+    function renderMachineOptions(matches) {
         const dropdown = document.getElementById('machine-dropdown');
-        const query = input.value.trim().toLowerCase();
-
         dropdown.innerHTML = '';
-        const matches = allMachines.filter(num => {
-            const label = 'loom - ' + num;
-            return String(num).includes(query) || label.includes(query);
-        });
-
-        if (matches.length === 0) {
+        if (!matches.length) {
             dropdown.style.display = 'none';
             return;
         }
-
-        matches.slice(0, 50).forEach(num => {
+        matches.forEach(num => {
             const div = document.createElement('div');
             div.className = 'search-item';
             div.textContent = 'Loom - ' + num;
@@ -1209,8 +1588,21 @@
             };
             dropdown.appendChild(div);
         });
-
         dropdown.style.display = 'block';
+    }
+
+    function openMachineDropdown() {
+        renderMachineOptions(allMachines);
+    }
+
+    function filterMachines() {
+        const input = document.getElementById('machine-search');
+        const query = input.value.trim().toLowerCase();
+        const matches = allMachines.filter(num => {
+            const label = 'loom - ' + num;
+            return String(num).includes(query) || label.includes(query);
+        });
+        renderMachineOptions(matches);
     }
 
     function selectMachine(num) {
@@ -1225,6 +1617,12 @@
         checkExistingRecord();
     }
 
+    function getNextMachineNumber(currentNum) {
+        const n = Number(currentNum);
+        if (!Number.isFinite(n) || n < 1 || n >= 324) return 1;
+        return n + 1;
+    }
+
     document.addEventListener('click', function(e) {
         const wrapper = document.querySelector('.machine-search-wrapper');
         if (wrapper && !wrapper.contains(e.target)) {
@@ -1232,12 +1630,23 @@
         }
     });
 
-    // Return the most recently saved non-empty RPM for this Loom, regardless of date.
     function getLatestRpmForMachine(loomNo) {
         const records = cachedRecords
             .filter(r => String(r.loomNo) === String(loomNo) && r.rpm !== '' && r.rpm != null)
             .sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
         return records.length ? records[0].rpm : '';
+    }
+
+    function getLatestItemForMachine(loomNo) {
+        const records = cachedRecords
+            .filter(r => String(r.loomNo) === String(loomNo) && r.itemName && String(r.itemName).trim() !== '')
+            .sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
+        if (records.length) return String(records[0].itemName).trim();
+        try {
+            return localStorage.getItem('weaving_last_item_name') || '';
+        } catch (e) {
+            return '';
+        }
     }
 
     function checkExistingRecord() {
@@ -1251,14 +1660,13 @@
         if (existing) {
             if (currentRole === 'admin') editingOriginalRecord = JSON.parse(JSON.stringify(existing));
             if (currentRole === 'entry') {
-                // Existing records remain protected from Entry User edits.
                 resetShiftFieldsOnly();
-                document.getElementById('item-name').value = existing.itemName || document.getElementById('item-name').value;
+                document.getElementById('item-name').value = existing.itemName || getLatestItemForMachine(loomNo);
                 document.getElementById('rpm').value = existing.rpm || getLatestRpmForMachine(loomNo);
                 alert('This Loom entry for ' + date + ' already exists. Only Admin can edit existing entries.');
                 return;
             }
-            document.getElementById('item-name').value = existing.itemName || '';
+            document.getElementById('item-name').value = existing.itemName || getLatestItemForMachine(loomNo);
             document.getElementById('rpm').value = existing.rpm || getLatestRpmForMachine(loomNo);
             document.getElementById('remarks').value = existing.remarks || '';
             ['a', 'b', 'c'].forEach(s => {
@@ -1271,12 +1679,7 @@
         } else {
             editingOriginalRecord = null;
             resetShiftFieldsOnly();
-            // Keep the last successfully saved Item Name for the next entry and after refresh.
-            const itemField = document.getElementById('item-name');
-            if (!itemField.value.trim()) {
-                try { itemField.value = localStorage.getItem('weaving_last_item_name') || ''; } catch (e) {}
-            }
-            // Item Name and Date remain as entered; RPM is loaded per selected Loom.
+            document.getElementById('item-name').value = getLatestItemForMachine(loomNo);
             document.getElementById('rpm').value = getLatestRpmForMachine(loomNo);
             document.getElementById('remarks').value = '';
         }
@@ -1300,7 +1703,6 @@
         const weftVal = weftInput === '' ? 0 : Number(weftInput);
         const downNum = downInput === '' ? 0 : Number(downInput);
 
-        // If production, stop count and downtime are all zero, efficiency must be zero.
         if (prodVal === 0 && weftVal === 0 && downNum === 0) {
             badge.textContent = 'Eff: 0.0%';
         } else if (downInput !== '') {
@@ -1313,16 +1715,10 @@
         }
     }
 
-    function resetForNextEntry() {
-        // Keep Date, Loom Number, Item Name and RPM after saving.
-        // Restore Item Name from local storage if another UI action cleared it.
+    function resetForNextEntry(nextLoomNum = null) {
         editingOriginalRecord = null;
         adminEditedFields.clear();
         document.getElementById('machine-dropdown').style.display = 'none';
-        const itemField = document.getElementById('item-name');
-        if (itemField && !itemField.value.trim()) {
-            try { itemField.value = localStorage.getItem('weaving_last_item_name') || ''; } catch (e) {}
-        }
         document.getElementById('remarks').value = '';
         ['a', 'b', 'c'].forEach(s => {
             document.getElementById('prod-' + s).value = '';
@@ -1330,6 +1726,14 @@
             document.getElementById('down-' + s).value = '';
             document.getElementById('eff-preview-' + s).textContent = 'Eff: 0.0%';
         });
+        if (nextLoomNum != null) {
+            selectMachine(nextLoomNum);
+        } else {
+            const itemField = document.getElementById('item-name');
+            if (itemField && !itemField.value.trim()) {
+                try { itemField.value = localStorage.getItem('weaving_last_item_name') || ''; } catch (e) {}
+            }
+        }
     }
 
     function resetForm(keepLoom = false) {
@@ -1352,7 +1756,6 @@
         });
     }
 
-    // Cloud Sync Functions (Firebase Realtime Database REST API)
     function setSyncIndicator(online) {
         const el = document.getElementById('sync-status');
         if (online) {
@@ -1375,6 +1778,10 @@
             localStorage.setItem(LOCAL_BACKUP_KEY, JSON.stringify(cachedRecords));
             setSyncIndicator(true);
             renderTable();
+            if (document.getElementById('item-wise-page').style.display === 'block') {
+                populateItemWiseFilters();
+                renderItemWise(true);
+            }
         } catch (err) {
             setSyncIndicator(false);
         }
@@ -1405,8 +1812,6 @@
         const remarksInput = document.getElementById('remarks').value.trim();
         const itemName = editBase && !adminEditedFields.has('item-name') ? (editBase.itemName || '') : itemInput;
         const rpm = editBase && !adminEditedFields.has('rpm') ? (editBase.rpm || '') : rpmInput;
-        // Persist the Item Name before saving, so it remains available even if
-        // the form is refreshed or the next machine is selected immediately.
         try {
             if (itemName) localStorage.setItem('weaving_last_item_name', itemName);
         } catch (e) {}
@@ -1427,7 +1832,6 @@
             const weftChanged = !oldShift || adminEditedFields.has('weft-' + s);
             const downChanged = !oldShift || adminEditedFields.has('down-' + s);
 
-            // Keep the original value of every field that the Admin did not change.
             const prodSource = oldShift && !prodChanged ? oldShift.prod : prodRaw;
             const weftSource = oldShift && !weftChanged ? oldShift.weft : weftRaw;
             const downSource = oldShift && !downChanged ? oldShift.down : downRaw;
@@ -1445,7 +1849,6 @@
             if (!(oldShift && !prodChanged && !weftChanged && !downChanged)) {
                 if (prodNum === 0 && weftNum === 0 && rawDownNum === 0) {
                     down = downSource === '' || downSource == null ? '' : 0;
-                    // All three shift inputs are zero/empty, so Running Time must be zero too.
                     run = 0;
                     eff = '0.0';
                 } else if (downSource !== '' && downSource != null) {
@@ -1482,7 +1885,6 @@
             remarks
         };
 
-        // Optimistic UI update
         const idx = cachedRecords.findIndex(r => r.id === record.id);
         if (idx > -1) {
             cachedRecords[idx] = record;
@@ -1498,15 +1900,13 @@
 
         renderTable();
         if (editBase) {
-            // Keep the Admin's form populated after saving; only the edited fields change.
             editingOriginalRecord = JSON.parse(JSON.stringify(record));
             adminEditedFields.clear();
         } else {
-            // Keep Date, Loom, Item Name and RPM visible; clear only shift entry boxes.
-            resetForNextEntry();
+            const nextNum = getNextMachineNumber(loomNo);
+            resetForNextEntry(nextNum);
         }
 
-        // Save to Firebase
         try {
             const res = await fetch(`${FIREBASE_DB_URL}/production_records/${recordId}.json`, {
                 method: 'PUT',
@@ -1522,7 +1922,10 @@
     }
 
     function editRecord(id) {
-        if (currentRole !== 'admin') return;
+        if (currentRole !== 'admin') {
+            alert('শুধুমাত্র Admin এডিট করতে পারবেন।');
+            return;
+        }
         const rec = cachedRecords.find(r => r.id === id);
         if (!rec) return;
         editingOriginalRecord = JSON.parse(JSON.stringify(rec));
@@ -1547,7 +1950,10 @@
     }
 
     async function deleteRecord(id) {
-        if (currentRole !== 'admin') return;
+        if (currentRole !== 'admin') {
+            alert('শুধুমাত্র Admin ডিলেট করতে পারবেন।');
+            return;
+        }
         if (confirm('Are you sure you want to delete this record?')) {
             cachedRecords = cachedRecords.filter(r => r.id !== id);
             localStorage.setItem(LOCAL_BACKUP_KEY, JSON.stringify(cachedRecords));
@@ -1640,9 +2046,6 @@
         });
     }
 
-
-
-    // Re-check Guest permissions after browser Back/Forward, page restore, and layout changes.
     window.addEventListener('pageshow', enforceGuestEntryLock);
     window.addEventListener('popstate', enforceGuestEntryLock);
     document.addEventListener('visibilitychange', function() {
@@ -1656,6 +2059,15 @@
         document.querySelector('.entry-card').style.display = 'none';
         document.querySelector('.sheet-container').style.display = 'none';
         document.getElementById('item-wise-page').style.display = 'block';
+        document.querySelectorAll('#btn-problem-entry').forEach(btn => {
+            if (false) {
+                btn.style.removeProperty('display');
+                btn.style.removeProperty('visibility');
+                btn.style.display = 'inline-block';
+                btn.style.visibility = 'visible';
+            }
+        });
+        closeMachineReasonBox();
         populateItemWiseFilters();
         renderItemWise();
         window.scrollTo({top:0, behavior:'smooth'});
@@ -1664,8 +2076,8 @@
     function hideItemWisePage() {
         sessionStorage.setItem('weaving_current_view', 'home');
         sessionStorage.removeItem('weaving_current_loom');
+        closeMachineReasonBox();
         document.getElementById('item-wise-page').style.display = 'none';
-        /* Only entry/admin roles may see the form when returning from this page. */
         if (currentRole === 'guest') {
             enforceGuestEntryLock();
         } else {
@@ -1687,39 +2099,245 @@
         if (years.includes(oldYear)) yearSelect.value = oldYear;
     }
 
-    function renderItemWise() {
+    function analyzeRecordMachineState(r) {
+        const shifts = r.shifts || {};
+        let totalRun = 0;
+        let totalDown = 0;
+        let totalWeft = 0;
+        const activeShifts = [];
+        const stoppedShifts = [];
+
+        ['a', 'b', 'c'].forEach(s => {
+            const sh = shifts[s] || {};
+            const p = Number(sh.prod) || 0;
+            const w = Number(sh.weft) || 0;
+            const d = Number(sh.down) || 0;
+            const runVal = sh.run !== '' && sh.run != null ? Number(sh.run) : Math.max(0, SHIFT_MINUTES - d);
+
+            totalWeft += w;
+            totalDown += d;
+
+            if (p > 0 || runVal > 0) {
+                totalRun += runVal;
+                activeShifts.push(s.toUpperCase());
+            } else if (d > 0 || w > 0) {
+                stoppedShifts.push(s.toUpperCase());
+            }
+        });
+
+        const prodVal = Number(r.totalProd) || 0;
+        const isRunning = prodVal > 0 || totalRun > 0;
+        const remarkText = String(r.remarks || '').trim();
+
+        const parts = [];
+        if (activeShifts.length) parts.push(`Running in Shift ${activeShifts.join(', ')}`);
+        if (totalRun > 0) parts.push(`Running Time: ${totalRun} min`);
+        if (prodVal > 0) parts.push(`Production: ${prodVal} yds`);
+        if (totalDown > 0) parts.push(`Downtime: ${totalDown} min`);
+        if (totalWeft > 0) parts.push(`Weft Stops: ${totalWeft}`);
+        if (remarkText) parts.push(`Remarks: ${remarkText}`);
+        return {
+            status: 'running',
+            reason: parts.join(' | ') || 'Production entry recorded'
+        };
+    }
+
+    function showAllItemMachineReasons(type, shouldScroll = true) {
+        activeReasonType = type;
+        const box = document.getElementById('machine-reason-box');
+        const title = document.getElementById('machine-reason-title');
+        const list = document.getElementById('machine-reason-list');
+        if (!box || !title || !list) return;
+
+        const labelType = type === 'running' ? 'Runing Machine — Item-wise Reasons' : 'Stop Machine — Item-wise Reasons';
+        const groups = [...itemWiseDetailStore.values()];
+        let totalCount = 0;
+        let htmlParts = [];
+
+        groups.forEach(g => {
+            const items = type === 'running' ? g.runningDetails : g.stopDetails;
+            if (!items.length) return;
+            totalCount += items.length;
+            const rowsHtml = items.map(d => `
+                <div class="reason-item ${type === 'stop' ? 'stop-reason' : ''}">
+                    <strong>Loom - ${escapeHtml(d.loomNo)}</strong> <span style="color:#64748b;">(${escapeHtml(formatDateDMY(d.date))})</span><br>
+                    <span>${escapeHtml(d.reason)}</span>
+                </div>
+            `).join('');
+            htmlParts.push(`<div class="reason-group-title">${escapeHtml(g.itemName)} (${items.length})</div>${rowsHtml}`);
+        });
+
+        title.textContent = `${labelType} (Total: ${totalCount})`;
+        if (!htmlParts.length) {
+            list.innerHTML = `<div class="reason-item">No ${type === 'running' ? 'running machine' : 'stop machine'} records found for this selection.</div>`;
+        } else {
+            list.innerHTML = htmlParts.join('');
+        }
+        box.style.display = 'block';
+        if (shouldScroll) {
+            box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    }
+
+    function closeMachineReasonBox() {
+        activeReasonType = null;
+        const box = document.getElementById('machine-reason-box');
+        if (box) box.style.display = 'none';
+    }
+
+    function renderItemWise(preserveOpenBox = false) {
+        const prevType = preserveOpenBox ? activeReasonType : null;
+        closeMachineReasonBox();
+        itemWiseDetailStore.clear();
+
         const date = document.getElementById('iw-date').value;
         const month = document.getElementById('iw-month').value;
         const year = document.getElementById('iw-year').value;
-        let records = cachedRecords.filter(r => {
+        const records = cachedRecords.filter(r => {
             const d = String(r.date || '');
             if (date && d !== date) return false;
             if (month && d.slice(5,7) !== month) return false;
             if (year && d.slice(0,4) !== year) return false;
             return true;
         });
+
+        const activeStopMatches = cachedStopRecords.filter(r => {
+            if (r.isRunning || r.startDate || r.startTime) return false;
+            const d = String(r.date || '');
+            if (date && d !== date) return false;
+            if (month && d.slice(5,7) !== month) return false;
+            if (year && d.slice(0,4) !== year) return false;
+            return true;
+        });
+
+        const restartedMatches = cachedStopRecords.filter(r => {
+            if (!(r.isRunning || r.startDate || r.startTime)) return false;
+            const d = String(r.startDate || r.date || '');
+            if (date && d !== date) return false;
+            if (month && d.slice(5,7) !== month) return false;
+            if (year && d.slice(0,4) !== year) return false;
+            return true;
+        });
+
+        // Collect all currently stopped machine numbers (Loom No.)
+        const stoppedLoomNumbers = new Set(activeStopMatches.map(sr => String(sr.loomNo)));
+
         const grouped = new Map();
         records.forEach(r => {
             const item = String(r.itemName || 'Unknown').trim() || 'Unknown';
-            if (!grouped.has(item)) grouped.set(item, {machines:new Set(), production:0});
+            if (!grouped.has(item)) {
+                grouped.set(item, {
+                    itemName: item,
+                    runningMachines: new Set(),
+                    stopMachines: new Set(),
+                    runningDetails: [],
+                    stopDetails: [],
+                    production: 0
+                });
+            }
             const g = grouped.get(item);
-            g.machines.add(String(r.loomNo));
+            const state = analyzeRecordMachineState(r);
+            const loomStr = String(r.loomNo);
             g.production += Number(r.totalProd) || 0;
+
+            // If this machine number is in Stop state, do NOT show in Running and do NOT count as Running
+            if (!stoppedLoomNumbers.has(loomStr)) {
+                g.runningMachines.add(loomStr);
+                g.runningDetails.push({ loomNo: loomStr, date: r.date || '', reason: state.reason });
+            }
         });
+
+        activeStopMatches.forEach(sr => {
+            const item = String(sr.itemName || 'Unknown').trim() || 'Unknown';
+            if (!grouped.has(item)) {
+                grouped.set(item, {
+                    itemName: item,
+                    runningMachines: new Set(),
+                    stopMachines: new Set(),
+                    runningDetails: [],
+                    stopDetails: [],
+                    production: 0
+                });
+            }
+            const g = grouped.get(item);
+            const loomStr = String(sr.loomNo);
+            g.runningMachines.delete(loomStr);
+            g.runningDetails = g.runningDetails.filter(d => String(d.loomNo) !== loomStr);
+            g.stopMachines.add(loomStr);
+            const reasonText = `Stop Time: ${sr.stopTime || '-'} | Reason: ${sr.reason || '-'}`;
+            g.stopDetails.push({ loomNo: loomStr, date: sr.date || '', reason: reasonText });
+        });
+
+        restartedMatches.forEach(sr => {
+            const item = String(sr.itemName || 'Unknown').trim() || 'Unknown';
+            if (!grouped.has(item)) {
+                grouped.set(item, {
+                    itemName: item,
+                    runningMachines: new Set(),
+                    stopMachines: new Set(),
+                    runningDetails: [],
+                    stopDetails: [],
+                    production: 0
+                });
+            }
+            const g = grouped.get(item);
+            const loomStr = String(sr.loomNo);
+            if (!stoppedLoomNumbers.has(loomStr)) {
+                g.stopMachines.delete(loomStr);
+                g.runningMachines.add(loomStr);
+                const existsDetail = g.runningDetails.some(d => String(d.loomNo) === loomStr);
+                if (!existsDetail) {
+                    const reasonText = `Restarted on ${formatDateDMY(sr.startDate || sr.date || '')} at ${sr.startTime || '-'} (Stopped at ${sr.stopTime || '-'})`;
+                    g.runningDetails.push({ loomNo: loomStr, date: sr.startDate || sr.date || '', reason: reasonText });
+                }
+            }
+        });
+
         const body = document.getElementById('item-wise-body');
         const foot = document.getElementById('item-wise-foot');
-        body.innerHTML = ''; foot.innerHTML = '';
+        body.innerHTML = '';
+        foot.innerHTML = '';
+
         const rows = [...grouped.entries()].sort((a,b) => a[0].localeCompare(b[0]));
-        if (!rows.length) { body.innerHTML = '<tr><td colspan="3">No production records found.</td></tr>'; return; }
-        let totalMachines = new Set(), totalProduction = 0;
-        rows.forEach(([item,g]) => {
-            g.machines.forEach(m => totalMachines.add(m));
+        if (!rows.length) {
+            body.innerHTML = '<tr><td colspan="4">No production records found.</td></tr>';
+            return;
+        }
+
+        let totalRunningMachines = new Set();
+        let totalStopMachines = new Set();
+        let totalProduction = 0;
+
+        rows.forEach(([item, g], idx) => {
+            // Ensure no stopped machine ever remains in running set/details
+            g.stopMachines.forEach(sm => {
+                g.runningMachines.delete(sm);
+                g.runningDetails = g.runningDetails.filter(d => String(d.loomNo) !== String(sm));
+            });
+
+            const storeKey = 'iw_' + idx;
+            itemWiseDetailStore.set(storeKey, g);
+
+            g.runningMachines.forEach(m => {
+                if (!stoppedLoomNumbers.has(String(m))) totalRunningMachines.add(m);
+            });
+            g.stopMachines.forEach(m => totalStopMachines.add(m));
             totalProduction += g.production;
+
             const tr = document.createElement('tr');
-            tr.innerHTML = `<td>${escapeHtml(item)}</td><td>${g.machines.size}</td><td>${g.production.toFixed(2)}</td>`;
+            tr.innerHTML = `
+                <td>${escapeHtml(item)}</td>
+                <td>${g.runningMachines.size}</td>
+                <td>${g.stopMachines.size}</td>
+                <td>${g.production.toFixed(2)}</td>
+            `;
             body.appendChild(tr);
         });
-        foot.innerHTML = `<tr><td style="font-weight:800;">TOTAL</td><td style="font-weight:800;">${totalMachines.size}</td><td style="font-weight:800;">${totalProduction.toFixed(2)}</td></tr>`;
+
+        foot.innerHTML = `<tr><td style="font-weight:800;">TOTAL</td><td style="font-weight:800;">${totalRunningMachines.size}</td><td style="font-weight:800;">${totalStopMachines.size}</td><td style="font-weight:800;">${totalProduction.toFixed(2)}</td></tr>`;
+        if (prevType) {
+            showAllItemMachineReasons(prevType, false);
+        }
     }
 
     function escapeHtml(value) {
@@ -1735,7 +2353,10 @@
     }
 
     function exportCSV() {
-        if (currentRole === 'guest') return;
+        if (currentRole !== 'admin') {
+            alert('শুধুমাত্র Admin এক্সেলে ট্রান্সফার করতে পারবেন।');
+            return;
+        }
         const selectedDate = getISODate('filter-date');
         let records = [...cachedRecords];
         if (!showAllDates && selectedDate) {
@@ -1779,7 +2400,719 @@
         link.click();
     }
 
-    // Register Service Worker for PWA
+    const STOP_RECORDS_KEY = 'weaving_stop_machine_records_v1';
+    let cachedStopRecords = [];
+
+    try {
+        cachedStopRecords = JSON.parse(localStorage.getItem(STOP_RECORDS_KEY)) || [];
+    } catch (e) {
+        cachedStopRecords = [];
+    }
+
+    (function populateStopLoomDatalist() {
+        const dl = document.getElementById('sm-loom-list');
+        if (!dl) return;
+        dl.innerHTML = allMachines.map(n => `<option value="${n}">Loom - ${n}</option>`).join('');
+    })();
+
+    let editingStopRecordId = null;
+    let startingStopRecordId = null;
+
+    function setStopFormMode(mode, rec = null) {
+        editingStopRecordId = null;
+        startingStopRecordId = null;
+
+        const machineInput = document.getElementById('sm-machine-no');
+        const itemInput = document.getElementById('sm-item-name');
+        const stopDateInput = document.getElementById('sm-stop-date');
+        const stopTimeInput = document.getElementById('sm-stop-time');
+        const reasonInput = document.getElementById('sm-stop-reason');
+        const startDateGroup = document.getElementById('sm-start-date-group');
+        const startTimeGroup = document.getElementById('sm-start-time-group');
+        const saveBtn = document.getElementById('sm-save-btn');
+
+        const dNow = new Date();
+        const defaultTime = `${String(dNow.getHours()).padStart(2,'0')}:${String(dNow.getMinutes()).padStart(2,'0')}`;
+
+        if (mode === 'start' && rec) {
+            startingStopRecordId = rec.id;
+            machineInput.value = rec.loomNo || '';
+            itemInput.value = rec.itemName || '';
+            setDateInput('sm-stop-date', rec.date || todayStr);
+            stopTimeInput.value = rec.stopTime || '';
+            reasonInput.value = rec.reason || '';
+
+            const isEntryOnly = currentRole === 'entry';
+            machineInput.readOnly = isEntryOnly;
+            itemInput.readOnly = isEntryOnly;
+            stopDateInput.readOnly = isEntryOnly;
+            stopTimeInput.readOnly = isEntryOnly;
+            reasonInput.readOnly = isEntryOnly;
+            machineInput.style.pointerEvents = isEntryOnly ? 'none' : '';
+            itemInput.style.pointerEvents = isEntryOnly ? 'none' : '';
+            stopDateInput.style.pointerEvents = isEntryOnly ? 'none' : '';
+            stopTimeInput.style.pointerEvents = isEntryOnly ? 'none' : '';
+            reasonInput.style.pointerEvents = isEntryOnly ? 'none' : '';
+
+            if (startDateGroup) startDateGroup.style.display = '';
+            if (startTimeGroup) startTimeGroup.style.display = '';
+            setDateInput('sm-start-date', rec.startDate || todayStr);
+            document.getElementById('sm-start-time').value = rec.startTime || defaultTime;
+            if (saveBtn) saveBtn.textContent = 'Save Running Time';
+            return;
+        }
+        machineInput.style.pointerEvents = '';
+        itemInput.style.pointerEvents = '';
+        stopDateInput.style.pointerEvents = '';
+        stopTimeInput.style.pointerEvents = '';
+        reasonInput.style.pointerEvents = '';
+
+        machineInput.readOnly = false;
+        itemInput.readOnly = false;
+        stopDateInput.readOnly = false;
+        stopTimeInput.readOnly = false;
+        reasonInput.readOnly = false;
+
+        if (startDateGroup) startDateGroup.style.display = 'none';
+        if (startTimeGroup) startTimeGroup.style.display = 'none';
+        document.getElementById('sm-start-date').value = '';
+        document.getElementById('sm-start-time').value = '';
+        if (saveBtn) saveBtn.textContent = 'Save Stop Machine';
+
+        if (mode === 'edit' && rec) {
+            editingStopRecordId = rec.id;
+            machineInput.value = rec.loomNo || '';
+            itemInput.value = rec.itemName || '';
+            setDateInput('sm-stop-date', rec.date || todayStr);
+            stopTimeInput.value = rec.stopTime || '';
+            reasonInput.value = rec.reason || '';
+            if (rec.startDate || rec.startTime) {
+                if (startDateGroup) startDateGroup.style.display = '';
+                if (startTimeGroup) startTimeGroup.style.display = '';
+                setDateInput('sm-start-date', rec.startDate || '');
+                document.getElementById('sm-start-time').value = rec.startTime || '';
+            }
+            if (saveBtn) saveBtn.textContent = 'Update Stop Machine';
+        }
+    }
+
+    function applyStopTableRolePermission() {
+        const th = document.getElementById('sm-action-th');
+        if (th) th.style.display = currentRole === 'admin' ? '' : 'none';
+    }
+
+    function showStopMachineEntryPage() {
+        if (!currentRole) return;
+        document.getElementById('item-wise-page').style.display = 'none';
+        const smPage = document.getElementById('stop-machine-page');
+        smPage.style.removeProperty('display');
+        smPage.style.removeProperty('visibility');
+        smPage.style.removeProperty('height');
+        smPage.style.removeProperty('min-height');
+        smPage.style.removeProperty('overflow');
+        smPage.style.display = 'block';
+
+        const isGuest = currentRole === 'guest';
+        const entryGrid = smPage.querySelector('.stop-entry-grid');
+        const entryActions = smPage.querySelector('.form-actions');
+        if (entryGrid) entryGrid.style.display = isGuest ? 'none' : '';
+        if (entryActions) entryActions.style.display = isGuest ? 'none' : '';
+
+        applyStopTableRolePermission();
+        if (!isGuest && !startingStopRecordId && !editingStopRecordId) {
+            setStopFormMode('new');
+            if (!getISODate('sm-stop-date')) {
+                setDateInput('sm-stop-date', todayStr);
+            }
+            const timeInput = document.getElementById('sm-stop-time');
+            if (timeInput && !timeInput.value) {
+                const d = new Date();
+                timeInput.value = `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+            }
+        }
+        renderStopMachineTable();
+        fetchStopMachineRecords();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function hideStopMachineEntryPage() {
+        setStopFormMode('new');
+        document.getElementById('stop-machine-page').style.display = 'none';
+        document.querySelector('.sheet-container').style.display = '';
+        if (currentRole !== 'guest') {
+            document.getElementById('entry-section').style.display = '';
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function onStopMachineInput() {
+        if (startingStopRecordId) return;
+        const raw = document.getElementById('sm-machine-no').value.trim();
+        const numMatch = raw.match(/(\d+)/);
+        if (!numMatch) return;
+        const loomNum = numMatch[1];
+        const itemField = document.getElementById('sm-item-name');
+        if (itemField && !itemField.value.trim()) {
+            const latestItem = getLatestItemForMachine(loomNum);
+            if (latestItem) itemField.value = latestItem;
+        }
+    }
+
+    function resetStopMachineForm() {
+        setStopFormMode('new');
+        document.getElementById('sm-machine-no').value = '';
+        document.getElementById('sm-item-name').value = '';
+        setDateInput('sm-stop-date', todayStr);
+        const d = new Date();
+        document.getElementById('sm-stop-time').value = `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+        document.getElementById('sm-stop-reason').value = '';
+    }
+
+    function openStartMachineForm(id) {
+        if (currentRole !== 'entry' && currentRole !== 'admin') return;
+        if (currentRole === 'entry' && startingStopRecordId && String(startingStopRecordId) !== String(id)) {
+            return;
+        }
+        const rec = cachedStopRecords.find(r => String(r.id) === String(id));
+        if (!rec) return;
+        if (currentRole === 'entry' && rec.isRunning) {
+            alert('এই মেশিনের চালুর তারিখ ও সময় ইতিমধ্যে সেভ করা হয়েছে। এন্ট্রি ইউজার এটি এডিট বা ডিলিট করতে পারবেন না।');
+            return;
+        }
+        setStopFormMode('start', rec);
+        document.querySelector('.stop-entry-grid')?.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function editStopMachineRecord(id) {
+        if (currentRole !== 'admin') {
+            alert('শুধুমাত্র Admin এডিট করতে পারবেন।');
+            return;
+        }
+        const rec = cachedStopRecords.find(r => String(r.id) === String(id));
+        if (!rec) return;
+        setStopFormMode('edit', rec);
+        document.querySelector('.stop-entry-grid')?.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    async function deleteStopMachineRecord(id) {
+        if (currentRole !== 'admin') {
+            alert('শুধুমাত্র Admin ডিলেট করতে পারবেন।');
+            return;
+        }
+        if (!confirm('আপনি কি এই বন্ধ মেশিনের এন্ট্রিটি ডিলিট করতে চান?')) return;
+        cachedStopRecords = cachedStopRecords.filter(r => String(r.id) !== String(id));
+        if (String(editingStopRecordId) === String(id) || String(startingStopRecordId) === String(id)) {
+            resetStopMachineForm();
+        }
+        localStorage.setItem(STOP_RECORDS_KEY, JSON.stringify(cachedStopRecords));
+        renderStopMachineTable();
+
+        try {
+            await fetch(`${FIREBASE_DB_URL}/stop_machine_records/${encodeURIComponent(id)}.json`, {
+                method: 'DELETE'
+            });
+            setSyncIndicator(true);
+        } catch (err) {
+            setSyncIndicator(false);
+        }
+    }
+
+    async function fetchStopMachineRecords() {
+        try {
+            const res = await fetch(`${FIREBASE_DB_URL}/stop_machine_records.json`);
+            if (!res.ok) throw new Error('Network error');
+            const data = await res.json();
+            const list = data ? Object.values(data) : [];
+            list.sort((a, b) => String(b.id || '').localeCompare(String(a.id || '')));
+            cachedStopRecords = list;
+            localStorage.setItem(STOP_RECORDS_KEY, JSON.stringify(cachedStopRecords));
+            renderStopMachineTable();
+        } catch (err) {
+            renderStopMachineTable();
+        }
+    }
+
+    async function saveStopMachineEntry() {
+        if (currentRole !== 'entry' && currentRole !== 'admin') return;
+
+        const isStartingMode = Boolean(startingStopRecordId);
+        const isEditingMode = currentRole === 'admin' && Boolean(editingStopRecordId);
+
+        if (isStartingMode) {
+            const targetRec = cachedStopRecords.find(r => String(r.id) === String(startingStopRecordId));
+            if (!targetRec) return;
+            if (currentRole === 'entry' && targetRec.isRunning) {
+                alert('এন্ট্রি ইউজার চালুর তথ্য এডিট করতে পারবেন না।');
+                return;
+            }
+            const startDate = getISODate('sm-start-date');
+            const startTime = document.getElementById('sm-start-time').value.trim();
+            if (!startDate) {
+                alert('সঠিক চালুর তারিখ (DD-MM-YYYY) দিন।');
+                return;
+            }
+            if (!startTime) {
+                alert('চালুর সময় দিন।');
+                return;
+            }
+
+            const updatedRec = {
+                ...targetRec,
+                loomNo: currentRole === 'admin'
+                    ? (parseInt((document.getElementById('sm-machine-no').value.trim().match(/(\d+)/) || [0, targetRec.loomNo])[1], 10) || targetRec.loomNo)
+                    : targetRec.loomNo,
+                itemName: currentRole === 'admin'
+                    ? (document.getElementById('sm-item-name').value.trim() || targetRec.itemName)
+                    : targetRec.itemName,
+                date: currentRole === 'admin' ? (getISODate('sm-stop-date') || targetRec.date) : targetRec.date,
+                stopTime: currentRole === 'admin' ? (document.getElementById('sm-stop-time').value.trim() || targetRec.stopTime) : targetRec.stopTime,
+                reason: currentRole === 'admin' ? (document.getElementById('sm-stop-reason').value.trim() || targetRec.reason) : targetRec.reason,
+                startDate,
+                startTime,
+                isRunning: true,
+                manualStop: false
+            };
+
+            const idx = cachedStopRecords.findIndex(r => String(r.id) === String(targetRec.id));
+            if (idx > -1) cachedStopRecords[idx] = updatedRec;
+            localStorage.setItem(STOP_RECORDS_KEY, JSON.stringify(cachedStopRecords));
+            resetStopMachineForm();
+            renderStopMachineTable();
+
+            try {
+                const res = await fetch(`${FIREBASE_DB_URL}/stop_machine_records/${encodeURIComponent(updatedRec.id)}.json`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updatedRec)
+                });
+                if (!res.ok) throw new Error('Start update failed');
+                setSyncIndicator(true);
+            } catch (err) {
+                setSyncIndicator(false);
+            }
+            return;
+        }
+
+        const rawLoom = document.getElementById('sm-machine-no').value.trim();
+        const numMatch = rawLoom.match(/(\d+)/);
+        const loomNo = numMatch ? parseInt(numMatch[1], 10) : NaN;
+        const itemName = document.getElementById('sm-item-name').value.trim();
+        const stopDate = getISODate('sm-stop-date');
+        const stopTime = document.getElementById('sm-stop-time').value.trim();
+        const stopReason = document.getElementById('sm-stop-reason').value.trim();
+
+        if (!Number.isFinite(loomNo) || loomNo < 1) {
+            alert('সঠিক মেশিন নাম্বার দিন।');
+            return;
+        }
+        if (!itemName) {
+            alert('আইটেম নেম দিন।');
+            return;
+        }
+        if (!stopDate) {
+            alert('সঠিক বন্ধের তারিখ (DD-MM-YYYY) দিন।');
+            return;
+        }
+        if (!stopTime) {
+            alert('বন্ধের সময় দিন।');
+            return;
+        }
+        if (!stopReason) {
+            alert('বন্ধের কারণ দিন।');
+            return;
+        }
+
+        if (isEditingMode) {
+            const oldRec = cachedStopRecords.find(r => String(r.id) === String(editingStopRecordId));
+            const startDate = getISODate('sm-start-date');
+            const startTime = document.getElementById('sm-start-time').value.trim();
+            const hasStarted = Boolean(startDate || startTime);
+            const updatedRec = {
+                ...(oldRec || {}),
+                id: editingStopRecordId,
+                loomNo,
+                itemName,
+                date: stopDate,
+                stopTime,
+                reason: stopReason,
+                startDate: startDate || '',
+                startTime: startTime || '',
+                isRunning: hasStarted,
+                manualStop: !hasStarted
+            };
+            const idx = cachedStopRecords.findIndex(r => String(r.id) === String(editingStopRecordId));
+            if (idx > -1) cachedStopRecords[idx] = updatedRec;
+            else cachedStopRecords.unshift(updatedRec);
+            localStorage.setItem(STOP_RECORDS_KEY, JSON.stringify(cachedStopRecords));
+            resetStopMachineForm();
+            renderStopMachineTable();
+
+            try {
+                const res = await fetch(`${FIREBASE_DB_URL}/stop_machine_records/${encodeURIComponent(updatedRec.id)}.json`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updatedRec)
+                });
+                if (!res.ok) throw new Error('Update failed');
+                setSyncIndicator(true);
+            } catch (err) {
+                setSyncIndicator(false);
+            }
+            return;
+        }
+
+        const safeTime = stopTime.replace(/[^0-9]/g, '');
+        const recordId = `${stopDate}_${loomNo}_${safeTime}_${Date.now()}`;
+        const record = {
+            id: recordId,
+            loomNo,
+            itemName,
+            date: stopDate,
+            stopTime,
+            reason: stopReason,
+            startDate: '',
+            startTime: '',
+            isRunning: false,
+            manualStop: true
+        };
+
+        cachedStopRecords.unshift(record);
+        localStorage.setItem(STOP_RECORDS_KEY, JSON.stringify(cachedStopRecords));
+        resetStopMachineForm();
+        renderStopMachineTable();
+
+        try {
+            const res = await fetch(`${FIREBASE_DB_URL}/stop_machine_records/${recordId}.json`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(record)
+            });
+            if (!res.ok) throw new Error('Save failed');
+            setSyncIndicator(true);
+        } catch (err) {
+            setSyncIndicator(false);
+        }
+    }
+
+    const stopColumnFilters = {
+        loom: null,
+        item: null,
+        date: null,
+        time: null,
+        reason: null,
+        startDate: null,
+        startTime: null
+    };
+    let activeStopFilterCol = null;
+
+    function getStopRecordColValue(r, colKey) {
+        if (colKey === 'loom') return r.loomNo != null && String(r.loomNo).trim() !== '' ? `Loom - ${String(r.loomNo).trim()}` : '-';
+        if (colKey === 'item') return String(r.itemName || '').trim() || '-';
+        if (colKey === 'date') return r.date ? formatDateDMY(r.date) : '-';
+        if (colKey === 'time') return String(r.stopTime || '').trim() || '-';
+        if (colKey === 'reason') return String(r.reason || '').trim() || '-';
+        if (colKey === 'startDate') return r.startDate ? formatDateDMY(r.startDate) : '-';
+        if (colKey === 'startTime') return String(r.startTime || '').trim() || '-';
+        return '-';
+    }
+
+    function updateStopFilterButtonStates() {
+        Object.keys(stopColumnFilters).forEach(colKey => {
+            const btn = document.getElementById('sm-fbtn-' + colKey);
+            if (!btn) return;
+            const selected = stopColumnFilters[colKey];
+            btn.classList.toggle('active', Array.isArray(selected));
+        });
+    }
+
+    function closeStopColumnFilterDropdown() {
+        const existing = document.getElementById('sm-excel-dropdown');
+        if (existing) existing.remove();
+        activeStopFilterCol = null;
+    }
+
+    function getRecordsFilteredByOtherColumns(excludeCol) {
+        return cachedStopRecords.filter(r => {
+            for (const [colKey, selectedVals] of Object.entries(stopColumnFilters)) {
+                if (colKey === excludeCol) continue;
+                if (Array.isArray(selectedVals)) {
+                    const val = getStopRecordColValue(r, colKey);
+                    if (!selectedVals.includes(val)) return false;
+                }
+            }
+            return true;
+        });
+    }
+
+    function toggleStopColumnFilter(colKey, event) {
+        if (event) event.stopPropagation();
+        if (activeStopFilterCol === colKey) {
+            closeStopColumnFilterDropdown();
+            return;
+        }
+        closeStopColumnFilterDropdown();
+        activeStopFilterCol = colKey;
+
+        const btn = document.getElementById('sm-fbtn-' + colKey);
+        if (!btn) return;
+
+        const candidateRecords = getRecordsFilteredByOtherColumns(colKey);
+        const uniqueVals = [...new Set(candidateRecords.map(r => getStopRecordColValue(r, colKey)))];
+        if (colKey === 'loom') {
+            uniqueVals.sort((a, b) => (parseInt(a.replace(/\D+/g, ''), 10) || 0) - (parseInt(b.replace(/\D+/g, ''), 10) || 0));
+        } else {
+            uniqueVals.sort((a, b) => a.localeCompare(b));
+        }
+
+        const currentSelected = stopColumnFilters[colKey];
+        const checkedSet = new Set(Array.isArray(currentSelected) ? currentSelected : uniqueVals);
+
+        const dropdown = document.createElement('div');
+        dropdown.id = 'sm-excel-dropdown';
+        dropdown.className = 'sm-excel-dropdown';
+        dropdown.onclick = function(e) { e.stopPropagation(); };
+
+        dropdown.innerHTML = `
+            <input type="text" class="sm-excel-search" id="sm-excel-search-input" placeholder="Search..." oninput="filterStopDropdownOptions()">
+            <div class="sm-excel-actions">
+                <button type="button" class="sm-excel-link-btn" onclick="setStopDropdownAll(true)">Select All</button>
+                <button type="button" class="sm-excel-link-btn" onclick="setStopDropdownAll(false)">Clear All</button>
+            </div>
+            <div class="sm-excel-options" id="sm-excel-options-list">
+                ${uniqueVals.length ? uniqueVals.map(val => `
+                    <label class="sm-excel-option" data-val="${escapeHtml(val.toLowerCase())}">
+                        <input type="checkbox" class="sm-excel-chk" value="${escapeHtml(val)}" ${checkedSet.has(val) ? 'checked' : ''}>
+                        <span>${escapeHtml(val)}</span>
+                    </label>
+                `).join('') : '<div style="color:#64748b;padding:4px;">No values</div>'}
+            </div>
+            <div class="sm-excel-footer">
+                <button type="button" class="sm-excel-clear" onclick="clearSingleStopColumnFilter('${colKey}')">Reset</button>
+                <button type="button" class="sm-excel-apply" onclick="applySingleStopColumnFilter('${colKey}')">OK</button>
+            </div>
+        `;
+
+        document.body.appendChild(dropdown);
+
+        const rect = btn.getBoundingClientRect();
+        const dropW = dropdown.offsetWidth || 220;
+        let left = rect.left;
+        if (left + dropW > window.innerWidth - 10) {
+            left = Math.max(10, window.innerWidth - dropW - 10);
+        }
+        let top = rect.bottom + 4;
+        if (top + 260 > window.innerHeight) {
+            top = Math.max(10, rect.top - 260);
+        }
+        dropdown.style.left = left + 'px';
+        dropdown.style.top = top + 'px';
+    }
+
+    function filterStopDropdownOptions() {
+        const q = (document.getElementById('sm-excel-search-input')?.value || '').trim().toLowerCase();
+        const items = document.querySelectorAll('#sm-excel-options-list .sm-excel-option');
+        items.forEach(item => {
+            const val = item.getAttribute('data-val') || '';
+            item.style.display = !q || val.includes(q) ? 'flex' : 'none';
+        });
+    }
+
+    function setStopDropdownAll(checked) {
+        const items = document.querySelectorAll('#sm-excel-options-list .sm-excel-option');
+        items.forEach(item => {
+            if (item.style.display === 'none') return;
+            const chk = item.querySelector('input[type="checkbox"]');
+            if (chk) chk.checked = checked;
+        });
+    }
+
+    function applySingleStopColumnFilter(colKey) {
+        const allBoxes = [...document.querySelectorAll('#sm-excel-options-list .sm-excel-chk')];
+        const visibleBoxes = allBoxes.filter(chk => chk.closest('.sm-excel-option')?.style.display !== 'none');
+        const chosen = allBoxes.filter(chk => chk.checked).map(chk => chk.value);
+
+        const candidateRecords = getRecordsFilteredByOtherColumns(colKey);
+        const allPossible = [...new Set(candidateRecords.map(r => getStopRecordColValue(r, colKey)))];
+
+        if (chosen.length === allPossible.length && visibleBoxes.length === allBoxes.length) {
+            stopColumnFilters[colKey] = null;
+        } else {
+            stopColumnFilters[colKey] = chosen;
+        }
+        closeStopColumnFilterDropdown();
+        renderStopMachineTable();
+    }
+
+    function clearSingleStopColumnFilter(colKey) {
+        stopColumnFilters[colKey] = null;
+        closeStopColumnFilterDropdown();
+        renderStopMachineTable();
+    }
+
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest || (!e.target.closest('#sm-excel-dropdown') && !e.target.closest('.sm-filter-btn'))) {
+            closeStopColumnFilterDropdown();
+        }
+    });
+
+    function clearStopTableFilters() {
+        Object.keys(stopColumnFilters).forEach(k => { stopColumnFilters[k] = null; });
+        closeStopColumnFilterDropdown();
+        renderStopMachineTable();
+    }
+
+    function renderStopMachineTable() {
+        applyStopTableRolePermission();
+        updateStopFilterButtonStates();
+        const tbody = document.getElementById('stop-machine-list-body');
+        if (!tbody) return;
+        const colSpan = currentRole === 'admin' ? 8 : 7;
+
+        const filtered = cachedStopRecords.filter(r => {
+            for (const [colKey, selectedVals] of Object.entries(stopColumnFilters)) {
+                if (Array.isArray(selectedVals)) {
+                    const val = getStopRecordColValue(r, colKey);
+                    if (!selectedVals.includes(val)) return false;
+                }
+            }
+            return true;
+        });
+
+        if (!filtered.length) {
+            tbody.innerHTML = `<tr><td colspan="${colSpan}" style="color:#64748b;font-weight:600;">কোনো বন্ধ মেশিনের এন্ট্রি নেই।</td></tr>`;
+            populateStopSummaryFilters();
+            renderMonthlyStopMinutes();
+            return;
+        }
+        tbody.innerHTML = filtered.map(r => {
+            const safeId = escapeHtml(String(r.id || ''));
+            const isStarted = Boolean(r.isRunning || r.startDate || r.startTime);
+            const canClickMachine = currentRole === 'admin' || (currentRole === 'entry' && !isStarted);
+            const machineCell = canClickMachine
+                ? `<button type="button" class="sm-machine-link" onclick="openStartMachineForm('${safeId}')">Loom - ${escapeHtml(r.loomNo)}</button>`
+                : `<span class="sm-machine-locked">Loom - ${escapeHtml(r.loomNo)}</span>`;
+
+            const actionTd = currentRole === 'admin'
+                ? `<td><div class="action-btns"><button type="button" class="edit-btn" onclick="editStopMachineRecord('${safeId}')">Edit</button><button type="button" class="del-btn" onclick="deleteStopMachineRecord('${safeId}')">Del</button></div></td>`
+                : '';
+            return `
+            <tr>
+                <td style="font-weight:700;">${machineCell}</td>
+                <td>${escapeHtml(r.itemName || '-')}</td>
+                <td>${escapeHtml(formatDateDMY(r.date))}</td>
+                <td>${escapeHtml(r.stopTime || '-')}</td>
+                <td style="text-align:left;">${escapeHtml(r.reason || '-')}</td>
+                <td>${r.startDate ? escapeHtml(formatDateDMY(r.startDate)) : '-'}</td>
+                <td>${r.startTime ? escapeHtml(r.startTime) : '-'}</td>
+                ${actionTd}
+            </tr>
+        `;
+        }).join('');
+        populateStopSummaryFilters();
+        renderMonthlyStopMinutes();
+    }
+
+    function parseStopStartMinutes(rec) {
+        const stopDate = String(rec.date || '').trim();
+        const stopTime = String(rec.stopTime || '').trim();
+        const startDate = String(rec.startDate || '').trim();
+        const startTime = String(rec.startTime || '').trim();
+        if (!stopDate || !stopTime || !startDate || !startTime) return 0;
+
+        const [sy, sm, sd] = stopDate.split('-').map(Number);
+        const [sth, stm] = stopTime.split(':').map(Number);
+        const [ry, rm, rd] = startDate.split('-').map(Number);
+        const [rth, rtm] = startTime.split(':').map(Number);
+
+        if (![sy, sm, sd, sth, stm, ry, rm, rd, rth, rtm].every(Number.isFinite)) return 0;
+
+        const stopMs = Date.UTC(sy, sm - 1, sd, sth, stm, 0);
+        const startMs = Date.UTC(ry, rm - 1, rd, rth, rtm, 0);
+        const diffMins = Math.round((startMs - stopMs) / 60000);
+        return diffMins > 0 ? diffMins : 0;
+    }
+
+    function populateStopSummaryFilters() {
+        const yearSelect = document.getElementById('sm-summary-year');
+        if (!yearSelect) return;
+        const prevYear = yearSelect.value;
+        const years = [...new Set(cachedStopRecords.map(r => {
+            const d = String(r.startDate || r.date || '');
+            return d.length >= 4 ? d.slice(0, 4) : '';
+        }).filter(Boolean))].sort().reverse();
+        yearSelect.innerHTML = '<option value="">All Years</option>' + years.map(y => `<option value="${y}">${escapeHtml(y)}</option>`).join('');
+        if (years.includes(prevYear)) yearSelect.value = prevYear;
+    }
+
+    function renderMonthlyStopMinutes() {
+        const tbody = document.getElementById('monthly-stop-minutes-body');
+        if (!tbody) return;
+        const selMonth = document.getElementById('sm-summary-month')?.value || '';
+        const selYear = document.getElementById('sm-summary-year')?.value || '';
+
+        const map = new Map();
+        cachedStopRecords.forEach(r => {
+            const mins = parseStopStartMinutes(r);
+            if (mins <= 0) return;
+            const refDate = String(r.startDate || r.date || '');
+            const ym = refDate.slice(0, 7);
+            const yr = refDate.slice(0, 4);
+            const mo = refDate.slice(5, 7);
+            if (selMonth && mo !== selMonth) return;
+            if (selYear && yr !== selYear) return;
+
+            const loom = String(r.loomNo || '');
+            const key = `${loom}__${ym}`;
+            if (!map.has(key)) {
+                map.set(key, { loomNo: loom, ym, totalMinutes: 0 });
+            }
+            map.get(key).totalMinutes += mins;
+        });
+
+        const rows = [...map.values()].sort((a, b) => {
+            const ymCmp = b.ym.localeCompare(a.ym);
+            if (ymCmp !== 0) return ymCmp;
+            return (parseInt(a.loomNo, 10) || 0) - (parseInt(b.loomNo, 10) || 0);
+        });
+
+        if (!rows.length) {
+            tbody.innerHTML = `<tr><td colspan="3" style="color:#64748b;font-weight:600;">কোনো সম্পন্ন বন্ধ ও চালুর সময়ের হিসাব নেই।</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = rows.map(row => {
+            const parts = row.ym.split('-');
+            const labelYM = parts.length === 2 ? `${parts[1]}-${parts[0]}` : row.ym;
+            return `
+            <tr>
+                <td style="font-weight:700;">Loom - ${escapeHtml(row.loomNo)}</td>
+                <td>${escapeHtml(labelYM)}</td>
+                <td style="font-weight:800; color:#991b1b;">${row.totalMinutes} মিনিট</td>
+            </tr>
+            `;
+        }).join('');
+    }
+
+    // Hook into Item-wise filters & rendering to include manual Stop Machine entries
+    const _origPopulateItemWiseFilters = populateItemWiseFilters;
+    populateItemWiseFilters = function() {
+        _origPopulateItemWiseFilters();
+        const dateSelect = document.getElementById('iw-date');
+        const yearSelect = document.getElementById('iw-year');
+        const oldDate = dateSelect.value, oldYear = yearSelect.value;
+        const allDates = [...new Set([
+            ...cachedRecords.map(r => r.date),
+            ...cachedStopRecords.map(r => r.date)
+        ].filter(Boolean))].sort().reverse();
+        dateSelect.innerHTML = '<option value="">All dates</option>' + allDates.map(d => `<option value="${d}">${formatDateDMY(d)}</option>`).join('');
+        const allYears = [...new Set(allDates.map(d => d.slice(0,4)))].sort().reverse();
+        yearSelect.innerHTML = '<option value="">All years</option>' + allYears.map(y => `<option value="${y}">${y}</option>`).join('');
+        if (allDates.includes(oldDate)) dateSelect.value = oldDate;
+        if (allYears.includes(oldYear)) yearSelect.value = oldYear;
+    };
+
+
+
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js').catch(() => {});
