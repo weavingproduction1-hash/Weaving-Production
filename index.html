@@ -998,7 +998,6 @@
             </div>
 
             <div class="form-actions">
-                <button type="button" class="btn btn-reset" onclick="resetForm()">Clear Fields</button>
                 <button type="button" class="btn btn-save" onclick="saveEntry()">Save Entry to Sheet</button>
             </div>
         </div>
@@ -1110,44 +1109,43 @@
 
     <div class="stop-entry-grid">
         <div class="form-group">
-            <label for="sm-machine-no">মেশিন নাম্বার (Machine Number)</label>
+            <label for="sm-machine-no">Machine Number</label>
             <input type="text" id="sm-machine-no" list="sm-loom-list" placeholder="Type or select Loom No. (1 - 324)" oninput="onStopMachineInput()">
             <datalist id="sm-loom-list"></datalist>
         </div>
         <div class="form-group">
-            <label for="sm-item-name">আইটেম নেম (Item Name)</label>
+            <label for="sm-item-name">Item Name</label>
             <input type="text" id="sm-item-name" placeholder="Enter Item Name">
         </div>
         <div class="form-group">
-            <label for="sm-stop-date">বন্ধের তারিখ (Stop Date)</label>
+            <label for="sm-stop-date">Stop Date</label>
             <div class="date-input-wrap">
                 <input type="text" id="sm-stop-date" inputmode="numeric" placeholder="DD-MM-YYYY" maxlength="10" autocomplete="off" onclick="openDatePicker('sm-stop-date-picker')">
                 <input type="date" id="sm-stop-date-picker" class="native-date-picker" onchange="datePickerChanged('sm-stop-date-picker','sm-stop-date','stop')">
             </div>
         </div>
         <div class="form-group">
-            <label for="sm-stop-time">বন্ধের সময় (Stop Time)</label>
+            <label for="sm-stop-time">Stop Time</label>
             <input type="time" id="sm-stop-time">
         </div>
         <div class="form-group" style="grid-column: 1 / -1;">
-            <label for="sm-stop-reason">বন্ধের কারণ (Stop Reason)</label>
+            <label for="sm-stop-reason">Stop Reason</label>
             <input type="text" id="sm-stop-reason" placeholder="Enter reason why machine stopped...">
         </div>
         <div class="form-group" id="sm-start-date-group" style="display:none;">
-            <label for="sm-start-date">চালুর তারিখ (Start / Running Date)</label>
+            <label for="sm-start-date">Start / Running Date</label>
             <div class="date-input-wrap">
                 <input type="text" id="sm-start-date" inputmode="numeric" placeholder="DD-MM-YYYY" maxlength="10" autocomplete="off" onclick="openDatePicker('sm-start-date-picker')">
                 <input type="date" id="sm-start-date-picker" class="native-date-picker" onchange="datePickerChanged('sm-start-date-picker','sm-start-date','start')">
             </div>
         </div>
         <div class="form-group" id="sm-start-time-group" style="display:none;">
-            <label for="sm-start-time">চালুর সময় (Start / Running Time)</label>
+            <label for="sm-start-time">Start / Running Time</label>
             <input type="time" id="sm-start-time">
         </div>
     </div>
 
     <div class="form-actions" style="margin-bottom: 18px;">
-        <button type="button" class="btn btn-reset" onclick="resetStopMachineForm()">Clear</button>
         <button type="button" class="btn btn-save" id="sm-save-btn" onclick="saveStopMachineEntry()">Save Stop Machine</button>
     </div>
 
@@ -1157,13 +1155,13 @@
         <table class="stop-records-table">
             <thead>
                 <tr>
-                    <th><span class="sm-col-wrap">মেশিন নাম্বার <button type="button" class="sm-filter-btn" id="sm-fbtn-loom" onclick="toggleStopColumnFilter('loom', event)" title="Filter">▾</button></span></th>
-                    <th><span class="sm-col-wrap">আইটেম নেম <button type="button" class="sm-filter-btn" id="sm-fbtn-item" onclick="toggleStopColumnFilter('item', event)" title="Filter">▾</button></span></th>
-                    <th><span class="sm-col-wrap">বন্ধের তারিখ <button type="button" class="sm-filter-btn" id="sm-fbtn-date" onclick="toggleStopColumnFilter('date', event)" title="Filter">▾</button></span></th>
-                    <th><span class="sm-col-wrap">বন্ধের সময় <button type="button" class="sm-filter-btn" id="sm-fbtn-time" onclick="toggleStopColumnFilter('time', event)" title="Filter">▾</button></span></th>
-                    <th><span class="sm-col-wrap">বন্ধের কারণ <button type="button" class="sm-filter-btn" id="sm-fbtn-reason" onclick="toggleStopColumnFilter('reason', event)" title="Filter">▾</button></span></th>
-                    <th><span class="sm-col-wrap">চালুর তারিখ <button type="button" class="sm-filter-btn" id="sm-fbtn-startDate" onclick="toggleStopColumnFilter('startDate', event)" title="Filter">▾</button></span></th>
-                    <th><span class="sm-col-wrap">চালুর সময় <button type="button" class="sm-filter-btn" id="sm-fbtn-startTime" onclick="toggleStopColumnFilter('startTime', event)" title="Filter">▾</button></span></th>
+                    <th><span class="sm-col-wrap">Machine Number <button type="button" class="sm-filter-btn" id="sm-fbtn-loom" onclick="toggleStopColumnFilter('loom', event)" title="Filter">▾</button></span></th>
+                    <th><span class="sm-col-wrap">Item Name <button type="button" class="sm-filter-btn" id="sm-fbtn-item" onclick="toggleStopColumnFilter('item', event)" title="Filter">▾</button></span></th>
+                    <th><span class="sm-col-wrap">Stop Date <button type="button" class="sm-filter-btn" id="sm-fbtn-date" onclick="toggleStopColumnFilter('date', event)" title="Filter">▾</button></span></th>
+                    <th><span class="sm-col-wrap">Stop Time <button type="button" class="sm-filter-btn" id="sm-fbtn-time" onclick="toggleStopColumnFilter('time', event)" title="Filter">▾</button></span></th>
+                    <th><span class="sm-col-wrap">Stop Reason <button type="button" class="sm-filter-btn" id="sm-fbtn-reason" onclick="toggleStopColumnFilter('reason', event)" title="Filter">▾</button></span></th>
+                    <th><span class="sm-col-wrap">Start Date <button type="button" class="sm-filter-btn" id="sm-fbtn-startDate" onclick="toggleStopColumnFilter('startDate', event)" title="Filter">▾</button></span></th>
+                    <th><span class="sm-col-wrap">Start Time <button type="button" class="sm-filter-btn" id="sm-fbtn-startTime" onclick="toggleStopColumnFilter('startTime', event)" title="Filter">▾</button></span></th>
                     <th id="sm-action-th">Action</th>
                 </tr>
             </thead>
@@ -1173,10 +1171,10 @@
 
     <div id="monthly-stop-minutes-section" style="margin-top: 22px;">
         <div class="sheet-top-bar" style="margin-bottom: 12px;">
-            <div class="sheet-title" style="font-size: 15px;">মাসিক মেশিন বন্ধের সময় (MONTHLY MACHINE STOP MINUTES)</div>
+            <div class="sheet-title" style="font-size: 15px;">MONTHLY MACHINE STOP MINUTES</div>
             <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
                 <div class="form-group" style="min-width:140px;">
-                    <label for="sm-summary-month">মাস (Month)</label>
+                    <label for="sm-summary-month">Month</label>
                     <select id="sm-summary-month" onchange="renderMonthlyStopMinutes()">
                         <option value="">All Months</option>
                         <option value="01">January</option>
@@ -1194,7 +1192,7 @@
                     </select>
                 </div>
                 <div class="form-group" style="min-width:120px;">
-                    <label for="sm-summary-year">বছর (Year)</label>
+                    <label for="sm-summary-year">Year</label>
                     <select id="sm-summary-year" onchange="renderMonthlyStopMinutes()">
                         <option value="">All Years</option>
                     </select>
@@ -1205,9 +1203,9 @@
             <table class="stop-records-table" id="monthly-stop-minutes-table">
                 <thead>
                     <tr>
-                        <th>মেশিন নাম্বার</th>
-                        <th>মাস / বছর</th>
-                        <th>মোট বন্ধের সময় (মিনিট)</th>
+                        <th><span class="sm-col-wrap">Machine Number <button type="button" class="sm-filter-btn" id="ms-fbtn-loom" onclick="toggleMonthlyStopColumnFilter('loom', event)" title="Filter">▾</button></span></th>
+                        <th><span class="sm-col-wrap">Month / Year <button type="button" class="sm-filter-btn" id="ms-fbtn-ym" onclick="toggleMonthlyStopColumnFilter('ym', event)" title="Filter">▾</button></span></th>
+                        <th><span class="sm-col-wrap">Total Stop Time (Minutes) <button type="button" class="sm-filter-btn" id="ms-fbtn-mins" onclick="toggleMonthlyStopColumnFilter('mins', event)" title="Filter">▾</button></span></th>
                     </tr>
                 </thead>
                 <tbody id="monthly-stop-minutes-body"></tbody>
@@ -1296,7 +1294,7 @@
         } else if (savedView === 'entry-form') {
             const loom = sessionStorage.getItem('weaving_current_loom');
             if (loom && currentRole !== 'guest') selectMachine(Number(loom));
-        } else if (savedView === 'stop-machine' && (currentRole === 'entry' || currentRole === 'admin')) {
+        } else if (savedView === 'stop-machine' && currentRole) {
             showStopMachineEntryPage();
         }
     }
@@ -1923,7 +1921,7 @@
 
     function editRecord(id) {
         if (currentRole !== 'admin') {
-            alert('শুধুমাত্র Admin এডিট করতে পারবেন।');
+            alert('Only Admin can edit.');
             return;
         }
         const rec = cachedRecords.find(r => r.id === id);
@@ -1951,7 +1949,7 @@
 
     async function deleteRecord(id) {
         if (currentRole !== 'admin') {
-            alert('শুধুমাত্র Admin ডিলেট করতে পারবেন।');
+            alert('Only Admin can delete.');
             return;
         }
         if (confirm('Are you sure you want to delete this record?')) {
@@ -2185,6 +2183,47 @@
         if (box) box.style.display = 'none';
     }
 
+    function parseYearMonth(rawDate) {
+        const s = String(rawDate || '').trim();
+        if (!s) return { yr: '', mo: '', iso: '' };
+        const mIso = s.match(/^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})$/);
+        if (mIso) {
+            const yr = mIso[1];
+            const mo = String(Number(mIso[2])).padStart(2, '0');
+            const dy = String(Number(mIso[3])).padStart(2, '0');
+            return { yr, mo, iso: `${yr}-${mo}-${dy}` };
+        }
+        const mDmy = s.match(/^(\d{1,2})[-/.](\d{1,2})[-/.](\d{4})$/);
+        if (mDmy) {
+            const yr = mDmy[3];
+            const mo = String(Number(mDmy[2])).padStart(2, '0');
+            const dy = String(Number(mDmy[1])).padStart(2, '0');
+            return { yr, mo, iso: `${yr}-${mo}-${dy}` };
+        }
+        return { yr: s.length >= 4 ? s.slice(0, 4) : '', mo: s.length >= 7 ? s.slice(5, 7) : '', iso: s };
+    }
+
+    function matchesItemWiseFilter(rawDate, selectedDate, selectedMonth, selectedYear) {
+        const parsed = parseYearMonth(rawDate);
+        if (!parsed.iso && !parsed.yr && !parsed.mo) return false;
+        if (selectedDate) {
+            const selParsed = parseYearMonth(selectedDate);
+            const targetIso = selParsed.iso || String(selectedDate).trim();
+            if (parsed.iso !== targetIso && String(rawDate).trim() !== String(selectedDate).trim()) return false;
+        }
+        if (selectedMonth && parsed.mo !== String(selectedMonth).padStart(2, '0')) return false;
+        if (selectedYear && parsed.yr !== String(selectedYear).trim()) return false;
+        return true;
+    }
+
+    function getRecordProductionValue(r) {
+        if (r && r.totalProd !== '' && r.totalProd != null && Number.isFinite(Number(r.totalProd))) {
+            return Number(r.totalProd);
+        }
+        const sh = (r && r.shifts) || {};
+        return ['a', 'b', 'c'].reduce((sum, k) => sum + (Number(sh[k] && sh[k].prod) || 0), 0);
+    }
+
     function renderItemWise(preserveOpenBox = false) {
         const prevType = preserveOpenBox ? activeReasonType : null;
         closeMachineReasonBox();
@@ -2193,33 +2232,19 @@
         const date = document.getElementById('iw-date').value;
         const month = document.getElementById('iw-month').value;
         const year = document.getElementById('iw-year').value;
-        const records = cachedRecords.filter(r => {
-            const d = String(r.date || '');
-            if (date && d !== date) return false;
-            if (month && d.slice(5,7) !== month) return false;
-            if (year && d.slice(0,4) !== year) return false;
-            return true;
-        });
+        const records = cachedRecords.filter(r => matchesItemWiseFilter(r.date, date, month, year));
 
         const activeStopMatches = cachedStopRecords.filter(r => {
             if (r.isRunning || r.startDate || r.startTime) return false;
-            const d = String(r.date || '');
-            if (date && d !== date) return false;
-            if (month && d.slice(5,7) !== month) return false;
-            if (year && d.slice(0,4) !== year) return false;
-            return true;
+            return matchesItemWiseFilter(r.date, date, month, year);
         });
 
         const restartedMatches = cachedStopRecords.filter(r => {
             if (!(r.isRunning || r.startDate || r.startTime)) return false;
-            const d = String(r.startDate || r.date || '');
-            if (date && d !== date) return false;
-            if (month && d.slice(5,7) !== month) return false;
-            if (year && d.slice(0,4) !== year) return false;
-            return true;
+            const d = r.startDate || r.date || '';
+            return matchesItemWiseFilter(d, date, month, year);
         });
 
-        // Collect all currently stopped machine numbers (Loom No.)
         const stoppedLoomNumbers = new Set(activeStopMatches.map(sr => String(sr.loomNo)));
 
         const grouped = new Map();
@@ -2238,9 +2263,8 @@
             const g = grouped.get(item);
             const state = analyzeRecordMachineState(r);
             const loomStr = String(r.loomNo);
-            g.production += Number(r.totalProd) || 0;
+            g.production += getRecordProductionValue(r);
 
-            // If this machine number is in Stop state, do NOT show in Running and do NOT count as Running
             if (!stoppedLoomNumbers.has(loomStr)) {
                 g.runningMachines.add(loomStr);
                 g.runningDetails.push({ loomNo: loomStr, date: r.date || '', reason: state.reason });
@@ -2309,7 +2333,6 @@
         let totalProduction = 0;
 
         rows.forEach(([item, g], idx) => {
-            // Ensure no stopped machine ever remains in running set/details
             g.stopMachines.forEach(sm => {
                 g.runningMachines.delete(sm);
                 g.runningDetails = g.runningDetails.filter(d => String(d.loomNo) !== String(sm));
@@ -2354,7 +2377,7 @@
 
     function exportCSV() {
         if (currentRole !== 'admin') {
-            alert('শুধুমাত্র Admin এক্সেলে ট্রান্সফার করতে পারবেন।');
+            alert('Only Admin can export to Excel.');
             return;
         }
         const selectedDate = getISODate('filter-date');
@@ -2503,6 +2526,9 @@
 
     function showStopMachineEntryPage() {
         if (!currentRole) return;
+        if (currentRole !== 'guest') {
+            sessionStorage.setItem('weaving_current_view', 'stop-machine');
+        }
         document.getElementById('item-wise-page').style.display = 'none';
         const smPage = document.getElementById('stop-machine-page');
         smPage.style.removeProperty('display');
@@ -2538,10 +2564,16 @@
     function hideStopMachineEntryPage() {
         setStopFormMode('new');
         document.getElementById('stop-machine-page').style.display = 'none';
-        document.querySelector('.sheet-container').style.display = '';
         if (currentRole !== 'guest') {
-            document.getElementById('entry-section').style.display = '';
+            sessionStorage.setItem('weaving_current_view', 'item-wise');
+            sessionStorage.removeItem('weaving_current_loom');
         }
+        document.querySelector('.entry-card').style.display = 'none';
+        document.querySelector('.sheet-container').style.display = 'none';
+        document.getElementById('item-wise-page').style.display = 'block';
+        closeMachineReasonBox();
+        populateItemWiseFilters();
+        renderItemWise();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -2576,7 +2608,7 @@
         const rec = cachedStopRecords.find(r => String(r.id) === String(id));
         if (!rec) return;
         if (currentRole === 'entry' && rec.isRunning) {
-            alert('এই মেশিনের চালুর তারিখ ও সময় ইতিমধ্যে সেভ করা হয়েছে। এন্ট্রি ইউজার এটি এডিট বা ডিলিট করতে পারবেন না।');
+            alert('Start date and time for this machine are already saved. Entry user cannot edit or delete it.');
             return;
         }
         setStopFormMode('start', rec);
@@ -2585,7 +2617,7 @@
 
     function editStopMachineRecord(id) {
         if (currentRole !== 'admin') {
-            alert('শুধুমাত্র Admin এডিট করতে পারবেন।');
+            alert('Only Admin can edit.');
             return;
         }
         const rec = cachedStopRecords.find(r => String(r.id) === String(id));
@@ -2596,10 +2628,10 @@
 
     async function deleteStopMachineRecord(id) {
         if (currentRole !== 'admin') {
-            alert('শুধুমাত্র Admin ডিলেট করতে পারবেন।');
+            alert('Only Admin can delete.');
             return;
         }
-        if (!confirm('আপনি কি এই বন্ধ মেশিনের এন্ট্রিটি ডিলিট করতে চান?')) return;
+        if (!confirm('Are you sure you want to delete this stop machine entry?')) return;
         cachedStopRecords = cachedStopRecords.filter(r => String(r.id) !== String(id));
         if (String(editingStopRecordId) === String(id) || String(startingStopRecordId) === String(id)) {
             resetStopMachineForm();
@@ -2642,17 +2674,17 @@
             const targetRec = cachedStopRecords.find(r => String(r.id) === String(startingStopRecordId));
             if (!targetRec) return;
             if (currentRole === 'entry' && targetRec.isRunning) {
-                alert('এন্ট্রি ইউজার চালুর তথ্য এডিট করতে পারবেন না।');
+                alert('Entry user cannot edit start details.');
                 return;
             }
             const startDate = getISODate('sm-start-date');
             const startTime = document.getElementById('sm-start-time').value.trim();
             if (!startDate) {
-                alert('সঠিক চালুর তারিখ (DD-MM-YYYY) দিন।');
+                alert('Please enter a valid start date (DD-MM-YYYY).');
                 return;
             }
             if (!startTime) {
-                alert('চালুর সময় দিন।');
+                alert('Please enter start time.');
                 return;
             }
 
@@ -2702,23 +2734,23 @@
         const stopReason = document.getElementById('sm-stop-reason').value.trim();
 
         if (!Number.isFinite(loomNo) || loomNo < 1) {
-            alert('সঠিক মেশিন নাম্বার দিন।');
+            alert('Please enter a valid machine number.');
             return;
         }
         if (!itemName) {
-            alert('আইটেম নেম দিন।');
+            alert('Please enter item name.');
             return;
         }
         if (!stopDate) {
-            alert('সঠিক বন্ধের তারিখ (DD-MM-YYYY) দিন।');
+            alert('Please enter a valid stop date (DD-MM-YYYY).');
             return;
         }
         if (!stopTime) {
-            alert('বন্ধের সময় দিন।');
+            alert('Please enter stop time.');
             return;
         }
         if (!stopReason) {
-            alert('বন্ধের কারণ দিন।');
+            alert('Please enter stop reason.');
             return;
         }
 
@@ -2979,7 +3011,7 @@
         });
 
         if (!filtered.length) {
-            tbody.innerHTML = `<tr><td colspan="${colSpan}" style="color:#64748b;font-weight:600;">কোনো বন্ধ মেশিনের এন্ট্রি নেই।</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="${colSpan}" style="color:#64748b;font-weight:600;">No stop machine entries found.</td></tr>`;
             populateStopSummaryFilters();
             renderMonthlyStopMinutes();
             return;
@@ -3076,22 +3108,217 @@
         });
 
         if (!rows.length) {
-            tbody.innerHTML = `<tr><td colspan="3" style="color:#64748b;font-weight:600;">কোনো সম্পন্ন বন্ধ ও চালুর সময়ের হিসাব নেই।</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="3" style="color:#64748b;font-weight:600;">No completed stop and start time records found.</td></tr>`;
             return;
         }
 
-        tbody.innerHTML = rows.map(row => {
+        const filteredRows = rows.filter(row => {
+            const parts = row.ym.split('-');
+            const labelYM = parts.length === 2 ? `${parts[1]}-${parts[0]}` : row.ym;
+            const vals = {
+                loom: `Loom - ${String(row.loomNo || '').trim()}`,
+                ym: labelYM,
+                mins: `${row.totalMinutes} Minutes`
+            };
+            for (const [colKey, selectedVals] of Object.entries(monthlyStopFilters)) {
+                if (Array.isArray(selectedVals) && !selectedVals.includes(vals[colKey])) {
+                    return false;
+                }
+            }
+            return true;
+        });
+
+        updateMonthlyStopFilterButtonStates();
+
+        if (!filteredRows.length) {
+            tbody.innerHTML = `<tr><td colspan="3" style="color:#64748b;font-weight:600;">No completed stop and start time records found.</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = filteredRows.map(row => {
             const parts = row.ym.split('-');
             const labelYM = parts.length === 2 ? `${parts[1]}-${parts[0]}` : row.ym;
             return `
             <tr>
                 <td style="font-weight:700;">Loom - ${escapeHtml(row.loomNo)}</td>
                 <td>${escapeHtml(labelYM)}</td>
-                <td style="font-weight:800; color:#991b1b;">${row.totalMinutes} মিনিট</td>
+                <td style="font-weight:800; color:#991b1b;">${row.totalMinutes} Minutes</td>
             </tr>
             `;
         }).join('');
     }
+
+    const monthlyStopFilters = { loom: null, ym: null, mins: null };
+    let activeMonthlyStopFilterCol = null;
+
+    function getAllAggregatedMonthlyStopRows() {
+        const selMonth = document.getElementById('sm-summary-month')?.value || '';
+        const selYear = document.getElementById('sm-summary-year')?.value || '';
+        const map = new Map();
+        cachedStopRecords.forEach(r => {
+            const mins = parseStopStartMinutes(r);
+            if (mins <= 0) return;
+            const refDate = String(r.startDate || r.date || '');
+            const ym = refDate.slice(0, 7);
+            const yr = refDate.slice(0, 4);
+            const mo = refDate.slice(5, 7);
+            if (selMonth && mo !== selMonth) return;
+            if (selYear && yr !== selYear) return;
+            const loom = String(r.loomNo || '');
+            const key = `${loom}__${ym}`;
+            if (!map.has(key)) map.set(key, { loomNo: loom, ym, totalMinutes: 0 });
+            map.get(key).totalMinutes += mins;
+        });
+        return [...map.values()].sort((a, b) => {
+            const ymCmp = b.ym.localeCompare(a.ym);
+            if (ymCmp !== 0) return ymCmp;
+            return (parseInt(a.loomNo, 10) || 0) - (parseInt(b.loomNo, 10) || 0);
+        }).map(row => {
+            const parts = row.ym.split('-');
+            const labelYM = parts.length === 2 ? `${parts[1]}-${parts[0]}` : row.ym;
+            return {
+                loom: `Loom - ${String(row.loomNo || '').trim()}`,
+                ym: labelYM,
+                mins: `${row.totalMinutes} Minutes`
+            };
+        });
+    }
+
+    function updateMonthlyStopFilterButtonStates() {
+        Object.keys(monthlyStopFilters).forEach(colKey => {
+            const btn = document.getElementById('ms-fbtn-' + colKey);
+            if (!btn) return;
+            btn.classList.toggle('active', Array.isArray(monthlyStopFilters[colKey]));
+        });
+    }
+
+    function closeMonthlyStopFilterDropdown() {
+        const existing = document.getElementById('ms-excel-dropdown');
+        if (existing) existing.remove();
+        activeMonthlyStopFilterCol = null;
+    }
+
+    function getMonthlyRowsFilteredByOtherColumns(excludeCol) {
+        const allRows = getAllAggregatedMonthlyStopRows();
+        return allRows.filter(item => {
+            for (const [colKey, selectedVals] of Object.entries(monthlyStopFilters)) {
+                if (colKey === excludeCol) continue;
+                if (Array.isArray(selectedVals) && !selectedVals.includes(item[colKey])) return false;
+            }
+            return true;
+        });
+    }
+
+    function toggleMonthlyStopColumnFilter(colKey, event) {
+        if (event) event.stopPropagation();
+        closeStopColumnFilterDropdown();
+        if (activeMonthlyStopFilterCol === colKey) {
+            closeMonthlyStopFilterDropdown();
+            return;
+        }
+        closeMonthlyStopFilterDropdown();
+        activeMonthlyStopFilterCol = colKey;
+
+        const btn = document.getElementById('ms-fbtn-' + colKey);
+        if (!btn) return;
+
+        const candidates = getMonthlyRowsFilteredByOtherColumns(colKey);
+        const uniqueVals = [...new Set(candidates.map(item => item[colKey]))];
+        if (colKey === 'loom') {
+            uniqueVals.sort((a, b) => (parseInt(a.replace(/\D+/g, ''), 10) || 0) - (parseInt(b.replace(/\D+/g, ''), 10) || 0));
+        } else if (colKey === 'mins') {
+            uniqueVals.sort((a, b) => (parseInt(a, 10) || 0) - (parseInt(b, 10) || 0));
+        } else {
+            uniqueVals.sort((a, b) => a.localeCompare(b));
+        }
+
+        const currentSelected = monthlyStopFilters[colKey];
+        const checkedSet = new Set(Array.isArray(currentSelected) ? currentSelected : uniqueVals);
+
+        const dropdown = document.createElement('div');
+        dropdown.id = 'ms-excel-dropdown';
+        dropdown.className = 'sm-excel-dropdown';
+        dropdown.onclick = function(e) { e.stopPropagation(); };
+
+        dropdown.innerHTML = `
+            <input type="text" class="sm-excel-search" id="ms-excel-search-input" placeholder="Search..." oninput="filterMonthlyDropdownOptions()">
+            <div class="sm-excel-actions">
+                <button type="button" class="sm-excel-link-btn" onclick="setMonthlyDropdownAll(true)">Select All</button>
+                <button type="button" class="sm-excel-link-btn" onclick="setMonthlyDropdownAll(false)">Clear All</button>
+            </div>
+            <div class="sm-excel-options" id="ms-excel-options-list">
+                ${uniqueVals.length ? uniqueVals.map(val => `
+                    <label class="sm-excel-option" data-val="${escapeHtml(val.toLowerCase())}">
+                        <input type="checkbox" class="ms-excel-chk" value="${escapeHtml(val)}" ${checkedSet.has(val) ? 'checked' : ''}>
+                        <span>${escapeHtml(val)}</span>
+                    </label>
+                `).join('') : '<div style="color:#64748b;padding:4px;">No values</div>'}
+            </div>
+            <div class="sm-excel-footer">
+                <button type="button" class="sm-excel-clear" onclick="clearSingleMonthlyStopColumnFilter('${colKey}')">Reset</button>
+                <button type="button" class="sm-excel-apply" onclick="applySingleMonthlyStopColumnFilter('${colKey}')">OK</button>
+            </div>
+        `;
+
+        document.body.appendChild(dropdown);
+
+        const rect = btn.getBoundingClientRect();
+        const dropW = dropdown.offsetWidth || 220;
+        let left = rect.left;
+        if (left + dropW > window.innerWidth - 10) {
+            left = Math.max(10, window.innerWidth - dropW - 10);
+        }
+        let top = rect.bottom + 4;
+        if (top + 260 > window.innerHeight) {
+            top = Math.max(10, rect.top - 260);
+        }
+        dropdown.style.left = left + 'px';
+        dropdown.style.top = top + 'px';
+    }
+
+    function filterMonthlyDropdownOptions() {
+        const q = (document.getElementById('ms-excel-search-input')?.value || '').trim().toLowerCase();
+        document.querySelectorAll('#ms-excel-options-list .sm-excel-option').forEach(item => {
+            const val = item.getAttribute('data-val') || '';
+            item.style.display = !q || val.includes(q) ? 'flex' : 'none';
+        });
+    }
+
+    function setMonthlyDropdownAll(checked) {
+        document.querySelectorAll('#ms-excel-options-list .sm-excel-option').forEach(item => {
+            if (item.style.display === 'none') return;
+            const chk = item.querySelector('input[type="checkbox"]');
+            if (chk) chk.checked = checked;
+        });
+    }
+
+    function applySingleMonthlyStopColumnFilter(colKey) {
+        const allBoxes = [...document.querySelectorAll('#ms-excel-options-list .ms-excel-chk')];
+        const visibleBoxes = allBoxes.filter(chk => chk.closest('.sm-excel-option')?.style.display !== 'none');
+        const chosen = allBoxes.filter(chk => chk.checked).map(chk => chk.value);
+        const candidates = getMonthlyRowsFilteredByOtherColumns(colKey);
+        const allPossible = [...new Set(candidates.map(item => item[colKey]))];
+
+        if (chosen.length === allPossible.length && visibleBoxes.length === allBoxes.length) {
+            monthlyStopFilters[colKey] = null;
+        } else {
+            monthlyStopFilters[colKey] = chosen;
+        }
+        closeMonthlyStopFilterDropdown();
+        renderMonthlyStopMinutes();
+    }
+
+    function clearSingleMonthlyStopColumnFilter(colKey) {
+        monthlyStopFilters[colKey] = null;
+        closeMonthlyStopFilterDropdown();
+        renderMonthlyStopMinutes();
+    }
+
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest || (!e.target.closest('#ms-excel-dropdown') && !e.target.closest('#monthly-stop-minutes-table .sm-filter-btn'))) {
+            closeMonthlyStopFilterDropdown();
+        }
+    });
 
     // Hook into Item-wise filters & rendering to include manual Stop Machine entries
     const _origPopulateItemWiseFilters = populateItemWiseFilters;
