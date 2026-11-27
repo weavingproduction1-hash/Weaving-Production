@@ -488,10 +488,35 @@
         }
 
         #data-table td:nth-child(2),
-        #data-table td:nth-child(21) {
+        #data-table td:nth-child(22) {
             white-space: normal;
             word-break: break-word;
             line-height: 1.25;
+        }
+
+        .eff-very-good {
+            background-color: #bbf7d0 !important;
+            color: #14532d !important;
+            font-weight: 800 !important;
+        }
+        .eff-good {
+            background-color: #dbeafe !important;
+            color: #1e3a8a !important;
+            font-weight: 800 !important;
+        }
+        .eff-normal {
+            background-color: #fef9c3 !important;
+            color: #854d0e !important;
+            font-weight: 800 !important;
+        }
+        .eff-bad {
+            background-color: #fee2e2 !important;
+            color: #991b1b !important;
+            font-weight: 800 !important;
+        }
+        .status-badge-cell {
+            font-weight: 800;
+            letter-spacing: 0.2px;
         }
 
         th {
@@ -611,6 +636,10 @@
 
         /* Print Layout */
         @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
             body.guest-view #app-container,
             body.guest-view #login-screen {
                 display: none !important;
@@ -1040,6 +1069,16 @@
                     </div>
                     <button type="button" id="btn-all-dates" class="btn btn-all no-print" onclick="toggleAllDates()">ALL</button>
                 </div>
+                <div class="date-filter-box no-print">
+                    <label for="filter-status-top">Status:</label>
+                    <select id="filter-status-top" onchange="onTopStatusSelectChange()" style="border:1px solid #94a3b8;border-radius:4px;padding:4px 6px;font-size:13px;font-weight:600;background:#fff;">
+                        <option value="ALL">All Status</option>
+                        <option value="Very Good">Very Good (95% - 100%)</option>
+                        <option value="Good">Good (90% - 94.9%)</option>
+                        <option value="Normal">Normal (80% - 89.9%)</option>
+                        <option value="Bad">Bad (Below 80%)</option>
+                    </select>
+                </div>
                 <button type="button" id="btn-export-excel" class="btn btn-excel no-print" onclick="exportCSV()">Export Excel (CSV)</button>
                 <button type="button" id="btn-print-pdf" class="btn btn-print no-print" onclick="printSheet()">Print / PDF</button>
                 <button type="button" id="btn-item-wise" class="btn btn-excel no-print" onclick="showItemWisePage()">Item-wise Production</button>
@@ -1050,15 +1089,16 @@
             <colgroup>
                 <col style="width: 62px;">
                 <col style="width: 105px;">
-                <col style="width: 52px;">
-                <col style="width: 44px;"><col style="width: 44px;"><col style="width: 44px;">
-                <col style="width: 42px;"><col style="width: 42px;"><col style="width: 42px;">
-                <col style="width: 56px;"><col style="width: 56px;"><col style="width: 56px;">
-                <col style="width: 48px;"><col style="width: 48px;"><col style="width: 48px;">
-                <col style="width: 48px;"><col style="width: 48px;"><col style="width: 48px;">
-                <col style="width: 74px;">
-                <col style="width: 74px;">
-                <col style="width: 95px;">
+                <col style="width: 50px;">
+                <col style="width: 43px;"><col style="width: 43px;"><col style="width: 43px;">
+                <col style="width: 40px;"><col style="width: 40px;"><col style="width: 40px;">
+                <col style="width: 54px;"><col style="width: 54px;"><col style="width: 54px;">
+                <col style="width: 46px;"><col style="width: 46px;"><col style="width: 46px;">
+                <col style="width: 46px;"><col style="width: 46px;"><col style="width: 46px;">
+                <col style="width: 70px;">
+                <col style="width: 72px;">
+                <col style="width: 78px;">
+                <col style="width: 92px;">
                 <col style="width: 72px;">
             </colgroup>
             <thead>
@@ -1073,6 +1113,7 @@
                     <th colspan="3">Runing Time</th>
                     <th rowspan="2">Total Production</th>
                     <th rowspan="2">Total Efficiency</th>
+                    <th rowspan="2">Status</th>
                     <th rowspan="2">Remarks</th>
                     <th rowspan="2" id="action-th" class="no-print">Action</th>
                 </tr>
@@ -1277,7 +1318,7 @@
         if (uid === 'Production' && pass === 'Pro@123') {
             errBox.style.display = 'none';
             setSession('entry');
-        } else if (uid === 'Production' && pass === 'Giyas@7252') {
+        } else if (uid === 'Production' && pass === 'ProAdmin@123') {
             errBox.style.display = 'none';
             setSession('admin');
         } else {
@@ -2020,9 +2061,34 @@
         renderTable();
     }
 
-    function renderTable() {
-        const tbody = document.getElementById('sheet-body');
-        tbody.innerHTML = '';
+    let sheetStatusFilter = null;
+
+    function getEfficiencyStatusInfo(totalEffRaw) {
+        const str = String(totalEffRaw ?? '').replace('%', '').trim();
+        const val = parseFloat(str);
+        if (!str || str === '-' || !Number.isFinite(val)) {
+            return { label: '-', cls: '' };
+        }
+        if (val >= 95) {
+            return { label: 'Very Good', cls: 'eff-very-good' };
+        }
+        if (val >= 90) {
+            return { label: 'Good', cls: 'eff-good' };
+        }
+        if (val >= 80) {
+            return { label: 'Normal', cls: 'eff-normal' };
+        }
+        return { label: 'Bad', cls: 'eff-bad' };
+    }
+
+    function onTopStatusSelectChange() {
+        const sel = document.getElementById('filter-status-top');
+        const val = sel ? sel.value : 'ALL';
+        sheetStatusFilter = val === 'ALL' ? null : [val];
+        renderTable();
+    }
+
+    function getFilteredSheetRecords() {
         const selectedDate = getISODate('filter-date');
         let records = [...cachedRecords];
 
@@ -2036,6 +2102,13 @@
             }
         }
 
+        if (Array.isArray(sheetStatusFilter)) {
+            records = records.filter(r => {
+                const st = getEfficiencyStatusInfo(r.totalEff).label;
+                return sheetStatusFilter.includes(st);
+            });
+        }
+
         records.sort((a, b) => {
             const dA = parseYearMonth(a.date).iso || String(a.date || '');
             const dB = parseYearMonth(b.date).iso || String(b.date || '');
@@ -2043,7 +2116,15 @@
             return (Number(a.loomNo) || 0) - (Number(b.loomNo) || 0);
         });
 
-        const colSpan = currentRole === 'admin' ? 22 : 21;
+        return records;
+    }
+
+    function renderTable() {
+        const tbody = document.getElementById('sheet-body');
+        tbody.innerHTML = '';
+        const records = getFilteredSheetRecords();
+
+        const colSpan = currentRole === 'admin' ? 23 : 22;
 
         if (records.length === 0) {
             const tr = document.createElement('tr');
@@ -2055,6 +2136,9 @@
         records.forEach(r => {
             const tr = document.createElement('tr');
             const loomLabel = showAllDates ? `${r.loomNo} <br><small style="color:#64748b;">(${formatDateDMY(r.date)})</small>` : r.loomNo;
+            const statusInfo = getEfficiencyStatusInfo(r.totalEff);
+            const effCellClass = statusInfo.cls ? statusInfo.cls : 'total-col';
+            const statusCellClass = statusInfo.cls ? `${statusInfo.cls} status-badge-cell` : 'status-badge-cell';
 
             const actionCell = currentRole === 'admin'
                 ? `<td class="no-print"><div class="action-btns"><button class="edit-btn" onclick="editRecord('${r.id}')">Edit</button><button class="del-btn" onclick="deleteRecord('${r.id}')">Del</button></div></td>`
@@ -2080,7 +2164,8 @@
                 <td>${r.shifts.b.run !== '' ? r.shifts.b.run : '-'}</td>
                 <td>${r.shifts.c.run !== '' ? r.shifts.c.run : '-'}</td>
                 <td class="total-col">${r.totalProd}</td>
-                <td class="total-col">${r.totalEff}</td>
+                <td class="${effCellClass}">${r.totalEff}</td>
+                <td class="${statusCellClass}">${statusInfo.label}</td>
                 <td>${r.remarks || '-'}</td>
                 ${actionCell}
             `;
@@ -2425,10 +2510,7 @@
             return;
         }
         const selectedDate = getISODate('filter-date');
-        let records = [...cachedRecords];
-        if (!showAllDates && selectedDate) {
-            records = records.filter(r => r.date === selectedDate);
-        }
+        const records = getFilteredSheetRecords();
         if (records.length === 0) {
             alert('No data available to export.');
             return;
@@ -2441,7 +2523,7 @@
             'Eff (%) A', 'Eff (%) B', 'Eff (%) C',
             'Downtime A', 'Downtime B', 'Downtime C',
             'Running Time A', 'Running Time B', 'Running Time C',
-            'Total Production', 'Total Efficiency', 'Remarks'
+            'Total Production', 'Total Efficiency', 'Status', 'Remarks'
         ];
 
         const rows = records.map(r => [
@@ -2456,6 +2538,7 @@
             r.shifts.a.run, r.shifts.b.run, r.shifts.c.run,
             r.totalProd,
             r.totalEff,
+            getEfficiencyStatusInfo(r.totalEff).label,
             `"${(r.remarks || '').replace(/"/g, '""')}"`
         ]);
 
