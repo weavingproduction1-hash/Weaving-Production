@@ -464,11 +464,34 @@
             min-width: 1080px;
         }
 
+        #data-table {
+            table-layout: fixed;
+            width: 100%;
+            min-width: 1240px;
+        }
+
         th, td {
             border: 1px solid var(--border-color);
             text-align: center;
             vertical-align: middle;
-            padding: 5px 3px;
+            padding: 5px 4px;
+            white-space: nowrap;
+        }
+
+        #data-table th,
+        #data-table td {
+            height: 28px;
+            padding: 5px 4px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        #data-table td:nth-child(2),
+        #data-table td:nth-child(21) {
+            white-space: normal;
+            word-break: break-word;
+            line-height: 1.25;
         }
 
         th {
@@ -1024,20 +1047,34 @@
         </div>
 
         <table id="data-table">
+            <colgroup>
+                <col style="width: 62px;">
+                <col style="width: 105px;">
+                <col style="width: 52px;">
+                <col style="width: 44px;"><col style="width: 44px;"><col style="width: 44px;">
+                <col style="width: 42px;"><col style="width: 42px;"><col style="width: 42px;">
+                <col style="width: 56px;"><col style="width: 56px;"><col style="width: 56px;">
+                <col style="width: 48px;"><col style="width: 48px;"><col style="width: 48px;">
+                <col style="width: 48px;"><col style="width: 48px;"><col style="width: 48px;">
+                <col style="width: 74px;">
+                <col style="width: 74px;">
+                <col style="width: 95px;">
+                <col style="width: 72px;">
+            </colgroup>
             <thead>
                 <tr>
-                    <th rowspan="2" style="width: 55px;">Loom No.</th>
-                    <th rowspan="2" style="width: 110px;">Item Name</th>
-                    <th rowspan="2" style="width: 50px;">RPM</th>
+                    <th rowspan="2">Loom No.</th>
+                    <th rowspan="2">Item Name</th>
+                    <th rowspan="2">RPM</th>
                     <th colspan="3">Production</th>
                     <th colspan="3">Weft Stops (Count)</th>
                     <th colspan="3">Shift Efficiency (%)</th>
                     <th colspan="3">Downtime (Minit)</th>
                     <th colspan="3">Runing Time</th>
-                    <th rowspan="2" style="width: 80px;">Total Production</th>
-                    <th rowspan="2" style="width: 80px;">Total Efficiency</th>
-                    <th rowspan="2" style="width: 110px;">Remarks</th>
-                    <th rowspan="2" id="action-th" class="no-print" style="width: 75px;">Action</th>
+                    <th rowspan="2">Total Production</th>
+                    <th rowspan="2">Total Efficiency</th>
+                    <th rowspan="2">Remarks</th>
+                    <th rowspan="2" id="action-th" class="no-print">Action</th>
                 </tr>
                 <tr>
                     <th class="sub-th">A</th>
@@ -1105,7 +1142,39 @@
 <div id="stop-machine-page" class="sheet-container" style="display:none; margin-top:18px;">
     <div class="sheet-top-bar">
         <div class="sheet-title">STOP MACHINE ENTRY</div>
-        <button type="button" class="btn btn-print" onclick="hideStopMachineEntryPage()">Back</button>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:end;">
+            <div class="form-group" style="min-width:140px;">
+                <label for="sm-top-date-filter">Date</label>
+                <select id="sm-top-date-filter" onchange="onTopStopFilterChange()">
+                    <option value="">All Dates</option>
+                </select>
+            </div>
+            <div class="form-group" style="min-width:140px;">
+                <label for="sm-top-month-filter">Month</label>
+                <select id="sm-top-month-filter" onchange="onTopStopFilterChange()">
+                    <option value="">All Months</option>
+                    <option value="01">January</option>
+                    <option value="02">February</option>
+                    <option value="03">March</option>
+                    <option value="04">April</option>
+                    <option value="05">May</option>
+                    <option value="06">June</option>
+                    <option value="07">July</option>
+                    <option value="08">August</option>
+                    <option value="09">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+            </div>
+            <div class="form-group" style="min-width:120px;">
+                <label for="sm-top-year-filter">Year</label>
+                <select id="sm-top-year-filter" onchange="onTopStopFilterChange()">
+                    <option value="">All Years</option>
+                </select>
+            </div>
+            <button type="button" class="btn btn-print" onclick="hideStopMachineEntryPage()">Back</button>
+        </div>
     </div>
 
     <div class="stop-entry-grid">
@@ -1163,55 +1232,12 @@
                     <th><span class="sm-col-wrap">Stop Reason <button type="button" class="sm-filter-btn" id="sm-fbtn-reason" onclick="toggleStopColumnFilter('reason', event)" title="Filter">▾</button></span></th>
                     <th><span class="sm-col-wrap">Start Date <button type="button" class="sm-filter-btn" id="sm-fbtn-startDate" onclick="toggleStopColumnFilter('startDate', event)" title="Filter">▾</button></span></th>
                     <th><span class="sm-col-wrap">Start Time <button type="button" class="sm-filter-btn" id="sm-fbtn-startTime" onclick="toggleStopColumnFilter('startTime', event)" title="Filter">▾</button></span></th>
+                    <th><span class="sm-col-wrap">Total Time <button type="button" class="sm-filter-btn" id="sm-fbtn-totalTime" onclick="toggleStopColumnFilter('totalTime', event)" title="Filter">▾</button></span></th>
                     <th id="sm-action-th">Action</th>
                 </tr>
             </thead>
             <tbody id="stop-machine-list-body"></tbody>
         </table>
-    </div>
-
-    <div id="monthly-stop-minutes-section" style="margin-top: 22px;">
-        <div class="sheet-top-bar" style="margin-bottom: 12px;">
-            <div class="sheet-title" style="font-size: 15px;">MONTHLY MACHINE STOP MINUTES</div>
-            <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
-                <div class="form-group" style="min-width:140px;">
-                    <label for="sm-summary-month">Month</label>
-                    <select id="sm-summary-month" onchange="renderMonthlyStopMinutes()">
-                        <option value="">All Months</option>
-                        <option value="01">January</option>
-                        <option value="02">February</option>
-                        <option value="03">March</option>
-                        <option value="04">April</option>
-                        <option value="05">May</option>
-                        <option value="06">June</option>
-                        <option value="07">July</option>
-                        <option value="08">August</option>
-                        <option value="09">September</option>
-                        <option value="10">October</option>
-                        <option value="11">November</option>
-                        <option value="12">December</option>
-                    </select>
-                </div>
-                <div class="form-group" style="min-width:120px;">
-                    <label for="sm-summary-year">Year</label>
-                    <select id="sm-summary-year" onchange="renderMonthlyStopMinutes()">
-                        <option value="">All Years</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-        <div style="overflow-x:auto;">
-            <table class="stop-records-table" id="monthly-stop-minutes-table">
-                <thead>
-                    <tr>
-                        <th><span class="sm-col-wrap">Machine Number <button type="button" class="sm-filter-btn" id="ms-fbtn-loom" onclick="toggleMonthlyStopColumnFilter('loom', event)" title="Filter">▾</button></span></th>
-                        <th><span class="sm-col-wrap">Month / Year <button type="button" class="sm-filter-btn" id="ms-fbtn-ym" onclick="toggleMonthlyStopColumnFilter('ym', event)" title="Filter">▾</button></span></th>
-                        <th><span class="sm-col-wrap">Total Stop Time (Minutes) <button type="button" class="sm-filter-btn" id="ms-fbtn-mins" onclick="toggleMonthlyStopColumnFilter('mins', event)" title="Filter">▾</button></span></th>
-                    </tr>
-                </thead>
-                <tbody id="monthly-stop-minutes-body"></tbody>
-            </table>
-        </div>
     </div>
 </div>
 
@@ -1975,7 +2001,8 @@
         if (rawDate && !validDate) { alert('Please enter a valid date as DD-MM-YYYY.'); return; }
         if (validDate) setDateInput('filter-date', validDate);
         showAllDates = false;
-        document.getElementById('btn-all-dates').classList.remove('active');
+        const btn = document.getElementById('btn-all-dates');
+        if (btn) btn.classList.remove('active');
         renderTable();
     }
 
@@ -1986,6 +2013,9 @@
             btn.classList.add('active');
         } else {
             btn.classList.remove('active');
+            if (!getISODate('filter-date')) {
+                setDateInput('filter-date', todayStr);
+            }
         }
         renderTable();
     }
@@ -1996,9 +2026,22 @@
         const selectedDate = getISODate('filter-date');
         let records = [...cachedRecords];
 
-        if (!showAllDates && selectedDate) {
-            records = records.filter(r => r.date === selectedDate);
+        if (!showAllDates) {
+            if (selectedDate) {
+                const selNorm = parseYearMonth(selectedDate).iso || selectedDate;
+                records = records.filter(r => {
+                    const rNorm = parseYearMonth(r.date).iso || String(r.date || '').trim();
+                    return rNorm === selNorm || String(r.date || '').trim() === selectedDate;
+                });
+            }
         }
+
+        records.sort((a, b) => {
+            const dA = parseYearMonth(a.date).iso || String(a.date || '');
+            const dB = parseYearMonth(b.date).iso || String(b.date || '');
+            if (showAllDates && dA !== dB) return dB.localeCompare(dA);
+            return (Number(a.loomNo) || 0) - (Number(b.loomNo) || 0);
+        });
 
         const colSpan = currentRole === 'admin' ? 22 : 21;
 
@@ -2827,6 +2870,62 @@
         }
     }
 
+
+    let selectedTopStopDate = '';
+    let selectedTopStopMonth = '';
+    let selectedTopStopYear = '';
+
+    function populateTopStopDateFilter() {
+        const dateSel = document.getElementById('sm-top-date-filter');
+        const monthSel = document.getElementById('sm-top-month-filter');
+        const yearSel = document.getElementById('sm-top-year-filter');
+        if (!dateSel) return;
+
+        const dates = [...new Set(cachedStopRecords.map(r => String(r.date || '').trim()).filter(Boolean))].sort().reverse();
+        const prevDate = dates.includes(selectedTopStopDate) ? selectedTopStopDate : '';
+        selectedTopStopDate = prevDate;
+        dateSel.innerHTML = '<option value="">All Dates</option>' + dates.map(d => `<option value="${escapeHtml(d)}">${escapeHtml(formatDateDMY(d))}</option>`).join('');
+        dateSel.value = prevDate;
+
+        if (monthSel) {
+            monthSel.value = selectedTopStopMonth || '';
+        }
+
+        if (yearSel) {
+            const years = [...new Set(dates.map(d => parseYearMonth(d).yr).filter(Boolean))].sort().reverse();
+            const prevYear = years.includes(selectedTopStopYear) ? selectedTopStopYear : '';
+            selectedTopStopYear = prevYear;
+            yearSel.innerHTML = '<option value="">All Years</option>' + years.map(y => `<option value="${escapeHtml(y)}">${escapeHtml(y)}</option>`).join('');
+            yearSel.value = prevYear;
+        }
+    }
+
+    function onTopStopFilterChange() {
+        const dateSel = document.getElementById('sm-top-date-filter');
+        const monthSel = document.getElementById('sm-top-month-filter');
+        const yearSel = document.getElementById('sm-top-year-filter');
+        selectedTopStopDate = dateSel ? dateSel.value : '';
+        selectedTopStopMonth = monthSel ? monthSel.value : '';
+        selectedTopStopYear = yearSel ? yearSel.value : '';
+        renderStopMachineTable();
+    }
+
+    function formatStopDurationLabel(mins) {
+        const m = Number(mins) || 0;
+        if (m <= 0) return '-';
+        return `${m} Minutes`;
+    }
+
+    function getBaseFilteredStopRecords() {
+        return cachedStopRecords.filter(r => {
+            const rawDate = String(r.date || '').trim();
+            if (!selectedTopStopDate && !selectedTopStopMonth && !selectedTopStopYear) {
+                return true;
+            }
+            return matchesItemWiseFilter(rawDate, selectedTopStopDate, selectedTopStopMonth, selectedTopStopYear);
+        });
+    }
+
     const stopColumnFilters = {
         loom: null,
         item: null,
@@ -2834,7 +2933,8 @@
         time: null,
         reason: null,
         startDate: null,
-        startTime: null
+        startTime: null,
+        totalTime: null
     };
     let activeStopFilterCol = null;
 
@@ -2846,6 +2946,7 @@
         if (colKey === 'reason') return String(r.reason || '').trim() || '-';
         if (colKey === 'startDate') return r.startDate ? formatDateDMY(r.startDate) : '-';
         if (colKey === 'startTime') return String(r.startTime || '').trim() || '-';
+        if (colKey === 'totalTime') return formatStopDurationLabel(parseStopStartMinutes(r));
         return '-';
     }
 
@@ -2865,7 +2966,7 @@
     }
 
     function getRecordsFilteredByOtherColumns(excludeCol) {
-        return cachedStopRecords.filter(r => {
+        return getBaseFilteredStopRecords().filter(r => {
             for (const [colKey, selectedVals] of Object.entries(stopColumnFilters)) {
                 if (colKey === excludeCol) continue;
                 if (Array.isArray(selectedVals)) {
@@ -2995,13 +3096,14 @@
     }
 
     function renderStopMachineTable() {
+        populateTopStopDateFilter();
         applyStopTableRolePermission();
         updateStopFilterButtonStates();
         const tbody = document.getElementById('stop-machine-list-body');
         if (!tbody) return;
-        const colSpan = currentRole === 'admin' ? 8 : 7;
+        const colSpan = currentRole === 'admin' ? 9 : 8;
 
-        const filtered = cachedStopRecords.filter(r => {
+        const filtered = getBaseFilteredStopRecords().filter(r => {
             for (const [colKey, selectedVals] of Object.entries(stopColumnFilters)) {
                 if (Array.isArray(selectedVals)) {
                     const val = getStopRecordColValue(r, colKey);
@@ -3013,17 +3115,21 @@
 
         if (!filtered.length) {
             tbody.innerHTML = `<tr><td colspan="${colSpan}" style="color:#64748b;font-weight:600;">No stop machine entries found.</td></tr>`;
-            populateStopSummaryFilters();
-            renderMonthlyStopMinutes();
             return;
         }
-        tbody.innerHTML = filtered.map(r => {
+
+        let totalMinutesSum = 0;
+        const rowsHtml = filtered.map(r => {
             const safeId = escapeHtml(String(r.id || ''));
             const isStarted = Boolean(r.isRunning || r.startDate || r.startTime);
             const canClickMachine = currentRole === 'admin' || (currentRole === 'entry' && !isStarted);
             const machineCell = canClickMachine
                 ? `<button type="button" class="sm-machine-link" onclick="openStartMachineForm('${safeId}')">Loom - ${escapeHtml(r.loomNo)}</button>`
                 : `<span class="sm-machine-locked">Loom - ${escapeHtml(r.loomNo)}</span>`;
+
+            const rowMins = parseStopStartMinutes(r);
+            totalMinutesSum += rowMins;
+            const totalTimeCell = rowMins > 0 ? `${rowMins} Minutes` : '-';
 
             const actionTd = currentRole === 'admin'
                 ? `<td><div class="action-btns"><button type="button" class="edit-btn" onclick="editStopMachineRecord('${safeId}')">Edit</button><button type="button" class="del-btn" onclick="deleteStopMachineRecord('${safeId}')">Del</button></div></td>`
@@ -3037,12 +3143,22 @@
                 <td style="text-align:left;">${escapeHtml(r.reason || '-')}</td>
                 <td>${r.startDate ? escapeHtml(formatDateDMY(r.startDate)) : '-'}</td>
                 <td>${r.startTime ? escapeHtml(r.startTime) : '-'}</td>
+                <td style="font-weight:700;">${escapeHtml(totalTimeCell)}</td>
                 ${actionTd}
             </tr>
         `;
         }).join('');
-        populateStopSummaryFilters();
-        renderMonthlyStopMinutes();
+
+        const trailingCols = currentRole === 'admin' ? '<td></td>' : '';
+        const totalRowHtml = `
+            <tr style="background:#eff6ff;font-weight:800;">
+                <td colspan="7" style="text-align:right;padding-right:12px;">Total Time</td>
+                <td style="color:#991b1b;">${totalMinutesSum} Minutes</td>
+                ${trailingCols}
+            </tr>
+        `;
+
+        tbody.innerHTML = rowsHtml + totalRowHtml;
     }
 
     function parseStopStartMinutes(rec) {
@@ -3064,262 +3180,6 @@
         const diffMins = Math.round((startMs - stopMs) / 60000);
         return diffMins > 0 ? diffMins : 0;
     }
-
-    function populateStopSummaryFilters() {
-        const yearSelect = document.getElementById('sm-summary-year');
-        if (!yearSelect) return;
-        const prevYear = yearSelect.value;
-        const years = [...new Set(cachedStopRecords.map(r => {
-            const d = String(r.startDate || r.date || '');
-            return d.length >= 4 ? d.slice(0, 4) : '';
-        }).filter(Boolean))].sort().reverse();
-        yearSelect.innerHTML = '<option value="">All Years</option>' + years.map(y => `<option value="${y}">${escapeHtml(y)}</option>`).join('');
-        if (years.includes(prevYear)) yearSelect.value = prevYear;
-    }
-
-    function renderMonthlyStopMinutes() {
-        const tbody = document.getElementById('monthly-stop-minutes-body');
-        if (!tbody) return;
-        const selMonth = document.getElementById('sm-summary-month')?.value || '';
-        const selYear = document.getElementById('sm-summary-year')?.value || '';
-
-        const map = new Map();
-        cachedStopRecords.forEach(r => {
-            const mins = parseStopStartMinutes(r);
-            if (mins <= 0) return;
-            const refDate = String(r.startDate || r.date || '');
-            const ym = refDate.slice(0, 7);
-            const yr = refDate.slice(0, 4);
-            const mo = refDate.slice(5, 7);
-            if (selMonth && mo !== selMonth) return;
-            if (selYear && yr !== selYear) return;
-
-            const loom = String(r.loomNo || '');
-            const key = `${loom}__${ym}`;
-            if (!map.has(key)) {
-                map.set(key, { loomNo: loom, ym, totalMinutes: 0 });
-            }
-            map.get(key).totalMinutes += mins;
-        });
-
-        const rows = [...map.values()].sort((a, b) => {
-            const ymCmp = b.ym.localeCompare(a.ym);
-            if (ymCmp !== 0) return ymCmp;
-            return (parseInt(a.loomNo, 10) || 0) - (parseInt(b.loomNo, 10) || 0);
-        });
-
-        if (!rows.length) {
-            tbody.innerHTML = `<tr><td colspan="3" style="color:#64748b;font-weight:600;">No completed stop and start time records found.</td></tr>`;
-            return;
-        }
-
-        const filteredRows = rows.filter(row => {
-            const parts = row.ym.split('-');
-            const labelYM = parts.length === 2 ? `${parts[1]}-${parts[0]}` : row.ym;
-            const vals = {
-                loom: `Loom - ${String(row.loomNo || '').trim()}`,
-                ym: labelYM,
-                mins: `${row.totalMinutes} Minutes`
-            };
-            for (const [colKey, selectedVals] of Object.entries(monthlyStopFilters)) {
-                if (Array.isArray(selectedVals) && !selectedVals.includes(vals[colKey])) {
-                    return false;
-                }
-            }
-            return true;
-        });
-
-        updateMonthlyStopFilterButtonStates();
-
-        if (!filteredRows.length) {
-            tbody.innerHTML = `<tr><td colspan="3" style="color:#64748b;font-weight:600;">No completed stop and start time records found.</td></tr>`;
-            return;
-        }
-
-        tbody.innerHTML = filteredRows.map(row => {
-            const parts = row.ym.split('-');
-            const labelYM = parts.length === 2 ? `${parts[1]}-${parts[0]}` : row.ym;
-            return `
-            <tr>
-                <td style="font-weight:700;">Loom - ${escapeHtml(row.loomNo)}</td>
-                <td>${escapeHtml(labelYM)}</td>
-                <td style="font-weight:800; color:#991b1b;">${row.totalMinutes} Minutes</td>
-            </tr>
-            `;
-        }).join('');
-    }
-
-    const monthlyStopFilters = { loom: null, ym: null, mins: null };
-    let activeMonthlyStopFilterCol = null;
-
-    function getAllAggregatedMonthlyStopRows() {
-        const selMonth = document.getElementById('sm-summary-month')?.value || '';
-        const selYear = document.getElementById('sm-summary-year')?.value || '';
-        const map = new Map();
-        cachedStopRecords.forEach(r => {
-            const mins = parseStopStartMinutes(r);
-            if (mins <= 0) return;
-            const refDate = String(r.startDate || r.date || '');
-            const ym = refDate.slice(0, 7);
-            const yr = refDate.slice(0, 4);
-            const mo = refDate.slice(5, 7);
-            if (selMonth && mo !== selMonth) return;
-            if (selYear && yr !== selYear) return;
-            const loom = String(r.loomNo || '');
-            const key = `${loom}__${ym}`;
-            if (!map.has(key)) map.set(key, { loomNo: loom, ym, totalMinutes: 0 });
-            map.get(key).totalMinutes += mins;
-        });
-        return [...map.values()].sort((a, b) => {
-            const ymCmp = b.ym.localeCompare(a.ym);
-            if (ymCmp !== 0) return ymCmp;
-            return (parseInt(a.loomNo, 10) || 0) - (parseInt(b.loomNo, 10) || 0);
-        }).map(row => {
-            const parts = row.ym.split('-');
-            const labelYM = parts.length === 2 ? `${parts[1]}-${parts[0]}` : row.ym;
-            return {
-                loom: `Loom - ${String(row.loomNo || '').trim()}`,
-                ym: labelYM,
-                mins: `${row.totalMinutes} Minutes`
-            };
-        });
-    }
-
-    function updateMonthlyStopFilterButtonStates() {
-        Object.keys(monthlyStopFilters).forEach(colKey => {
-            const btn = document.getElementById('ms-fbtn-' + colKey);
-            if (!btn) return;
-            btn.classList.toggle('active', Array.isArray(monthlyStopFilters[colKey]));
-        });
-    }
-
-    function closeMonthlyStopFilterDropdown() {
-        const existing = document.getElementById('ms-excel-dropdown');
-        if (existing) existing.remove();
-        activeMonthlyStopFilterCol = null;
-    }
-
-    function getMonthlyRowsFilteredByOtherColumns(excludeCol) {
-        const allRows = getAllAggregatedMonthlyStopRows();
-        return allRows.filter(item => {
-            for (const [colKey, selectedVals] of Object.entries(monthlyStopFilters)) {
-                if (colKey === excludeCol) continue;
-                if (Array.isArray(selectedVals) && !selectedVals.includes(item[colKey])) return false;
-            }
-            return true;
-        });
-    }
-
-    function toggleMonthlyStopColumnFilter(colKey, event) {
-        if (event) event.stopPropagation();
-        closeStopColumnFilterDropdown();
-        if (activeMonthlyStopFilterCol === colKey) {
-            closeMonthlyStopFilterDropdown();
-            return;
-        }
-        closeMonthlyStopFilterDropdown();
-        activeMonthlyStopFilterCol = colKey;
-
-        const btn = document.getElementById('ms-fbtn-' + colKey);
-        if (!btn) return;
-
-        const candidates = getMonthlyRowsFilteredByOtherColumns(colKey);
-        const uniqueVals = [...new Set(candidates.map(item => item[colKey]))];
-        if (colKey === 'loom') {
-            uniqueVals.sort((a, b) => (parseInt(a.replace(/\D+/g, ''), 10) || 0) - (parseInt(b.replace(/\D+/g, ''), 10) || 0));
-        } else if (colKey === 'mins') {
-            uniqueVals.sort((a, b) => (parseInt(a, 10) || 0) - (parseInt(b, 10) || 0));
-        } else {
-            uniqueVals.sort((a, b) => a.localeCompare(b));
-        }
-
-        const currentSelected = monthlyStopFilters[colKey];
-        const checkedSet = new Set(Array.isArray(currentSelected) ? currentSelected : uniqueVals);
-
-        const dropdown = document.createElement('div');
-        dropdown.id = 'ms-excel-dropdown';
-        dropdown.className = 'sm-excel-dropdown';
-        dropdown.onclick = function(e) { e.stopPropagation(); };
-
-        dropdown.innerHTML = `
-            <input type="text" class="sm-excel-search" id="ms-excel-search-input" placeholder="Search..." oninput="filterMonthlyDropdownOptions()">
-            <div class="sm-excel-actions">
-                <button type="button" class="sm-excel-link-btn" onclick="setMonthlyDropdownAll(true)">Select All</button>
-                <button type="button" class="sm-excel-link-btn" onclick="setMonthlyDropdownAll(false)">Clear All</button>
-            </div>
-            <div class="sm-excel-options" id="ms-excel-options-list">
-                ${uniqueVals.length ? uniqueVals.map(val => `
-                    <label class="sm-excel-option" data-val="${escapeHtml(val.toLowerCase())}">
-                        <input type="checkbox" class="ms-excel-chk" value="${escapeHtml(val)}" ${checkedSet.has(val) ? 'checked' : ''}>
-                        <span>${escapeHtml(val)}</span>
-                    </label>
-                `).join('') : '<div style="color:#64748b;padding:4px;">No values</div>'}
-            </div>
-            <div class="sm-excel-footer">
-                <button type="button" class="sm-excel-clear" onclick="clearSingleMonthlyStopColumnFilter('${colKey}')">Reset</button>
-                <button type="button" class="sm-excel-apply" onclick="applySingleMonthlyStopColumnFilter('${colKey}')">OK</button>
-            </div>
-        `;
-
-        document.body.appendChild(dropdown);
-
-        const rect = btn.getBoundingClientRect();
-        const dropW = dropdown.offsetWidth || 220;
-        let left = rect.left;
-        if (left + dropW > window.innerWidth - 10) {
-            left = Math.max(10, window.innerWidth - dropW - 10);
-        }
-        let top = rect.bottom + 4;
-        if (top + 260 > window.innerHeight) {
-            top = Math.max(10, rect.top - 260);
-        }
-        dropdown.style.left = left + 'px';
-        dropdown.style.top = top + 'px';
-    }
-
-    function filterMonthlyDropdownOptions() {
-        const q = (document.getElementById('ms-excel-search-input')?.value || '').trim().toLowerCase();
-        document.querySelectorAll('#ms-excel-options-list .sm-excel-option').forEach(item => {
-            const val = item.getAttribute('data-val') || '';
-            item.style.display = !q || val.includes(q) ? 'flex' : 'none';
-        });
-    }
-
-    function setMonthlyDropdownAll(checked) {
-        document.querySelectorAll('#ms-excel-options-list .sm-excel-option').forEach(item => {
-            if (item.style.display === 'none') return;
-            const chk = item.querySelector('input[type="checkbox"]');
-            if (chk) chk.checked = checked;
-        });
-    }
-
-    function applySingleMonthlyStopColumnFilter(colKey) {
-        const allBoxes = [...document.querySelectorAll('#ms-excel-options-list .ms-excel-chk')];
-        const visibleBoxes = allBoxes.filter(chk => chk.closest('.sm-excel-option')?.style.display !== 'none');
-        const chosen = allBoxes.filter(chk => chk.checked).map(chk => chk.value);
-        const candidates = getMonthlyRowsFilteredByOtherColumns(colKey);
-        const allPossible = [...new Set(candidates.map(item => item[colKey]))];
-
-        if (chosen.length === allPossible.length && visibleBoxes.length === allBoxes.length) {
-            monthlyStopFilters[colKey] = null;
-        } else {
-            monthlyStopFilters[colKey] = chosen;
-        }
-        closeMonthlyStopFilterDropdown();
-        renderMonthlyStopMinutes();
-    }
-
-    function clearSingleMonthlyStopColumnFilter(colKey) {
-        monthlyStopFilters[colKey] = null;
-        closeMonthlyStopFilterDropdown();
-        renderMonthlyStopMinutes();
-    }
-
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest || (!e.target.closest('#ms-excel-dropdown') && !e.target.closest('#monthly-stop-minutes-table .sm-filter-btn'))) {
-            closeMonthlyStopFilterDropdown();
-        }
-    });
 
     // Hook into Item-wise filters & rendering to include manual Stop Machine entries
     const _origPopulateItemWiseFilters = populateItemWiseFilters;
